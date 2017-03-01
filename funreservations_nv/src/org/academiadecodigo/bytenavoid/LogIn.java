@@ -1,5 +1,7 @@
 package org.academiadecodigo.bytenavoid;
 
+import java.util.Scanner;
+
 /**
  * Created by codecadet on 01/03/17.
  */
