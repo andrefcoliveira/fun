@@ -1,9 +1,11 @@
 package org.academiadecodigo.bytenavoid.client;
 
+import java.io.Serializable;
+
 /**
  * Created by codecadet on 01/03/17.
  */
-public class Client {
+public class Client implements Serializable {
 
     private String name;
     private int ID;
