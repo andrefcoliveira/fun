@@ -23,19 +23,18 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(PORT_NUM);
+
         } catch (IOException e) {
             System.out.println("Port not working!");
             e.printStackTrace();
-        } finally {
-            try {
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
         }
 
-        while (!socket.isClosed()) {
-            waitForClient(serverSocket, socket);
+        while (true) {
+
+
+            waitForClient(serverSocket,socket);
+
         }
     }
 
@@ -65,6 +64,7 @@ public class Server {
 
         @Override
         public void run() {
+            System.out.println("Init Handler");
             PrintWriter output = null;
             BufferedReader input = null;
             try {
@@ -89,6 +89,7 @@ public class Server {
                     ClientHandler clientHandler = new ClientHandler(socket);
                     clientHandler.startClientAccess();
                     break;
+/*
 
                 case "E":
                     FacilityHandler facilityHandler = new FacilityHandler(socket);
@@ -98,6 +99,7 @@ public class Server {
                 default:
                     errorMessage();
 
+*/
 
             }
         }
@@ -122,5 +124,5 @@ public class Server {
     }
 */
 
-   }
+
 

@@ -26,15 +26,20 @@ public class ClientHandler {
 
     }
 
-    private void startClientAccess() {
+    public void startClientAccess() {
 
-        String answer;
+        String answer = "";
 
-        System.out.println("(L)og In or (S)ign Up? ");
-        answer = scanner.nextLine();
+        output.println("(L)og In or (S)ign Up? ");
+        try {
+            answer = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         switch (answer) {
             case "L":
+
                 logInClient();
                 break;
 
@@ -42,12 +47,85 @@ public class ClientHandler {
                 signUpClient();
                 break;
 
-            default:
+           /* default:
                 errorMessage();
 
-
+*/
         }
     }
 
+    private void signUpClient() {
+        Client client = new Client(socket);
+        client.init();
 
+       /* private String name;
+        private int ID;
+        private String password;
+        private String address;
+        private int phoneNumber;
+    */
+    }
+
+    private void logInClient() {
+        String answer = "";
+
+        output.println("Please, enter your name: ");
+        try {
+            answer = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        /*if (clientExists()) {
+
+            while (!passwordCorrect(answer)) {
+
+                output.println("Please, enter your password: ");
+                try {
+                    answer = input.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }*/
+      /*      chooseAction();
+        }
+
+
+    private void chooseAction() {
+        String answer = "";
+        output.println("What do you want to do? \n " +
+                "Make a (R)eservation \n" + "(M)anage a reservation \n"
+                + "(C)ancell a reservation ");
+
+        switch (answer) {
+            case "R":
+                makeReservation();
+                break;
+            case "M":
+                manageReservation();
+                break;
+            case "C":
+                cancellReservation();
+                break;
+            default:
+                errorMessage();
+        }
+    }
+    private void makeReservation() {
+        String answer = "";
+        output.println("What kind of facility do you want to book? \n" +
+                "(1) Soccer \n" + "(2) Tennis \n" + "(3) Swimming pool \n" +
+                "(4) Volley \n" + "(5) Running \n" + "(6) Sports Space ");
+
+        switch (answer) {
+            case "1":
+                choose(EntityType.SOCCER);
+        }
+
+    }*/
+
+    }
 }
+
+
