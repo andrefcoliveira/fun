@@ -29,4 +29,35 @@ public class Facility implements Serializable {
         this.info = info;
 
     }
+
+    public FacilityType getType() {
+        return type;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setReservationList(LinkedList<Reservation> reservationList) {
+        this.reservationList = reservationList;
+    }
+    public LinkedList<Reservation> getReservationList() {
+        return reservationList;
+    }
 }
