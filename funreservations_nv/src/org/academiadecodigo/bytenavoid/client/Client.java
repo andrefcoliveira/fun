@@ -1,6 +1,7 @@
 package org.academiadecodigo.bytenavoid.client;
 
-import java.io.Serializable;
+import java.io.*;
+import java.net.Socket;
 
 /**
  * Created by codecadet on 01/03/17.
@@ -8,12 +9,54 @@ import java.io.Serializable;
 public class Client implements Serializable {
 
     private String name;
-    private int ID;
+    private String userName;
     private String password;
-    private String address;
+    private String email;
     private int phoneNumber;
+    private PrintWriter output = null;
+    private BufferedReader input = null;
 
-    public Client() {
+    public Client(Socket socket) {
+        try {
+            output = new PrintWriter(socket.getOutputStream(), true);
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void init() {
+
+        try {
+            output.println("Please, enter your name: ");
+            name = input.readLine();
+
+            output.println("Please, choose an username: ");
+            userName = input.readLine();
+
+            output.println("Please, choose a password: ");
+            password = input.readLine();
+
+            output.println("Please, enter your email: ");
+            email = input.readLine();
+
+            output.println("Please, enter your phone number: ");
+            phoneNumber = Integer.parseInt(input.readLine());
+
+            output.println("Welcome to the amazing booking world!");
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        output.println("Please, enter your name: ");
+        try {
+            name = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -21,16 +64,16 @@ public class Client implements Serializable {
         this.name = name;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPhoneNumber(int phoneNumber) {
@@ -41,12 +84,12 @@ public class Client implements Serializable {
         return name;
     }
 
-    public int getID() {
-        return ID;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
