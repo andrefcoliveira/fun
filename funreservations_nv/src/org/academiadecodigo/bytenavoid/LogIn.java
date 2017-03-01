@@ -1,5 +1,7 @@
 package org.academiadecodigo.bytenavoid;
 
+import java.util.Scanner;
+
 /**
  * Created by codecadet on 01/03/17.
  */
@@ -12,54 +14,10 @@ public class LogIn {
 
         scanner = new Scanner(System.in);
 
-        clientOrEntity();
     }
 
-    private void clientOrEntity() {
-
-        String anwser = "";
-
-        System.out.println("(C)lient or (E)ntity? ");
-        anwser = scanner.nextLine();
-
-        switch (anwser) {
-            case "C":
-                startClientAccess();
-                break;
-
-            case "E":
-                startEntityAccess();
-                break;
-
-            default:
-                errorMessage();
 
 
-        }
-    }
-
-    private void startClientAccess() {
-
-        String anwser;
-
-        System.out.println("(L)og In or (S)ign Up? ");
-        anwser = scanner.nextLine();
-
-        switch (anwser) {
-            case "L":
-                logInClient();
-                break;
-
-            case "S":
-                signUpClient();
-                break;
-
-            default:
-                errorMessage();
-
-
-        }
-    }
 
     private void logInClient() {
         String answer;
