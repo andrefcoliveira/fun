@@ -157,7 +157,6 @@ public class ClientHandler {
 
         switch (answer) {
             case "R":
-                System.out.println("DENTRO DO R ");
                 makeReservation();
                 break;
          /*   case "M":
@@ -215,9 +214,6 @@ public class ClientHandler {
 
         output.println("Which facility would you like to book?");
 
-
-        System.out.println("ANTES DO FOR DO CHOOSE");
-
         System.out.println("TAMANHO DA LISTA " + Manager.getFacilities().size());
 
 
@@ -226,13 +222,11 @@ public class ClientHandler {
 
             if (Manager.getFacilities().get(i).getType().equals(facilityType)) {
                 output.println("(" + (counter++) + ") " + Manager.getFacilities().get(i).getName());
-                System.out.println("DENTRO DO FOR DO CHOOSE");
                 facilityPos.add(i);
             }
         }
         try {
             answer1 = input.readLine();
-            System.out.println("Answer " + answer1);
         } catch (IOException e) {
             e.printStackTrace();
         }
