@@ -32,7 +32,6 @@ public class Server {
 
         while (true) {
 
-
             waitForClient(serverSocket,socket);
 
         }

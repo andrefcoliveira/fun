@@ -13,52 +13,15 @@ public class Client implements Serializable {
     private String password;
     private String email;
     private int phoneNumber;
-    private PrintWriter output = null;
-    private BufferedReader input = null;
 
-    public Client(Socket socket) {
-        try {
-            output = new PrintWriter(socket.getOutputStream(), true);
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Client(String name, String userName, String password, String email, int phoneNumber) {
+        this.name = name;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
-    public void init() {
-
-        try {
-            output.println("Please, enter your name: ");
-            name = input.readLine();
-
-            output.println("Please, choose an username: ");
-            userName = input.readLine();
-
-            output.println("Please, choose a password: ");
-            password = input.readLine();
-
-            output.println("Please, enter your email: ");
-            email = input.readLine();
-
-            output.println("Please, enter your phone number: ");
-            phoneNumber = Integer.parseInt(input.readLine());
-
-            output.println("Welcome to the amazing booking world!");
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        output.println("Please, enter your name: ");
-        try {
-            name = input.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     public void setName(String name) {
         this.name = name;
