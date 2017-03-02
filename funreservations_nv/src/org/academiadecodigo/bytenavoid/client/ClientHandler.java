@@ -1,5 +1,8 @@
 package org.academiadecodigo.bytenavoid.client;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.academiadecodigo.bytenavoid.facility.Facility;
+import org.academiadecodigo.bytenavoid.facility.FacilityType;
 import org.academiadecodigo.bytenavoid.util.Manager;
 
 import java.io.BufferedReader;
@@ -7,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by codecadet on 01/03/17.
@@ -95,7 +99,7 @@ public class ClientHandler {
 
     private void logInClient(String username) {
 
-        if(username.equals("")) {
+        if (username.equals("")) {
             output.println("Please, enter your username: ");
             try {
                 username = input.readLine();
@@ -107,63 +111,64 @@ public class ClientHandler {
 
 
         if (clientExists(username)) {
-
-            //TODO: Verificar lista vazia (validacao).
-/*            while (!passwordCorrect(answer)) {
-
-                output.println("Please, enter your password: ");
-                try {
-                    answer = input.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
             System.out.println("Client Exists");
             chooseAction();
 
+        } else {
+
+            output.println("This username does not exist. Please enter a valid one or (S)ign Up.");
+            String newUserName = "";
+
+            try {
+                newUserName = input.readLine();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            switch (newUserName) {
+                case "S":
+                    signUpClient();
+                    break;
+                default:
+                    logInClient(newUserName);
+
+            }
+
         }
+    }
 
-        output.println("This username does not exist. Please enter a valid one or (S)ign Up.");
-        String newUserName="";
-
+    private void chooseAction() {
+        String answer = "";
         try {
-            newUserName = input.readLine();
+            output.println("What do you want to do? \n" +
+                    "Make a (R)eservation \n" + "(M)anage a reservation \n"
+                    + "(C)ancell a reservation ");
+
+            System.out.println("TESTING");
+
+
+            answer = input.readLine();
+            System.out.println("ANSWER " + answer);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        switch (username) {
-            case "S":
-                signUpClient();
-                break;
-            default:
-                logInClient(newUserName);
-
-        }
-
-
-    }
-
-    private void chooseAction() {
-        String answer = "";
-        output.println("What do you want to do? \n" +
-                "Make a (R)eservation \n" + "(M)anage a reservation \n"
-                + "(C)ancell a reservation ");
-
         switch (answer) {
             case "R":
+                System.out.println("DENTRO DO R ");
                 makeReservation();
-          /*      break;
-            case "M":
+                break;
+         /*   case "M":
                 manageReservation();
                 break;
             case "C":
                 cancellReservation();
                 break;
+                */
             default:
-                errorMessage();
-        }*/
+                chooseAction();
         }
     }
 
@@ -173,11 +178,73 @@ public class ClientHandler {
                 "(1) Soccer \n" + "(2) Tennis \n" + "(3) Swimming pool \n" +
                 "(4) Volley \n" + "(5) Running \n" + "(6) Sports Space ");
 
-     /*   switch (answer) {
-            case "1":
-                choose(EntityType.SOCCER);
+        try {
+            answer = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-*/    }
+        switch (answer) {
+            case "1":
+                choose(FacilityType.SOCCER);
+                break;
+            case "2":
+                choose(FacilityType.TENIS);
+                break;
+            case "3":
+                choose(FacilityType.SWIMMINGPOOL);
+                break;
+            case "4":
+                choose(FacilityType.VOLEY);
+                break;
+            case "5":
+                choose(FacilityType.RUNNING);
+                break;
+            case "6":
+                choose(FacilityType.SPORTSSPACE);
+            default:
+                output.println("Please, enter a valid option.");
+                makeReservation();
+        }
+
+    }
+
+    private void choose(FacilityType facilityType) {
+        String answer1 = "";
+        int counter = 1;
+        ArrayList<Integer> facilityPos = new ArrayList<>();
+
+        output.println("Which facility would you like to book?");
+
+
+        System.out.println("ANTES DO FOR DO CHOOSE");
+
+        System.out.println("TAMANHO DA LISTA " + Manager.getFacilities().size());
+
+
+        for (int i = 0; i < Manager.getFacilities().size(); i++) {
+            System.out.println(Manager.getFacilities().get(i).getName());
+
+            if (Manager.getFacilities().get(i).getType().equals(facilityType)) {
+                output.println("(" + (counter++) + ") " + Manager.getFacilities().get(i).getName());
+                System.out.println("DENTRO DO FOR DO CHOOSE");
+                facilityPos.add(i);
+            }
+        }
+        try {
+            answer1 = input.readLine();
+            System.out.println("Answer " + answer1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < facilityPos.size(); i++) {
+            if (Integer.parseInt(answer1) == (i + 1)) {
+                output.println("You have chosen the facility " + Manager.getFacilities().get(facilityPos.get(i)).getName());
+
+            }
+        }
+
+    }
 
 
     private boolean clientExists(String username) {

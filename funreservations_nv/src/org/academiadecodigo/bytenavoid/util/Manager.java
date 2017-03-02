@@ -1,6 +1,7 @@
 package org.academiadecodigo.bytenavoid.util;
 
 import org.academiadecodigo.bytenavoid.client.Client;
+import org.academiadecodigo.bytenavoid.facility.Facility;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -10,6 +11,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Manager {
 
     private static CopyOnWriteArrayList<Client> clientList;
+    private static CopyOnWriteArrayList<Facility> facilities;
+
 
 
 
@@ -17,8 +20,14 @@ public class Manager {
         return clientList;
     }
 
+    public static CopyOnWriteArrayList<Facility> getFacilities() {
+        return facilities;
+    }
+
+
     public void init() {
 
         clientList = new CopyOnWriteArrayList<>();
+        facilities = new CopyOnWriteArrayList<>();
     }
 }
