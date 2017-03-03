@@ -1,10 +1,6 @@
 package org.academiadecodigo.bytenavoid.util;
 
 
-import org.academiadecodigo.bytenavoid.client.Client;
-import org.academiadecodigo.bytenavoid.facility.Facility;
-import org.academiadecodigo.bytenavoid.reservation.Reservation;
-
 /**
  * Created by codecadet on 02/03/17.
  */
