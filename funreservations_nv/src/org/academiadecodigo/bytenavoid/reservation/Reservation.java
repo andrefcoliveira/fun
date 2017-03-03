@@ -20,6 +20,7 @@ public class Reservation implements Serializable{
         this.client = client;
         this.facility = facility;
         calendar = new GregorianCalendar(2017, month, day, hour, 0);
+
     }
 
     public GregorianCalendar getCalendar() {
@@ -33,5 +34,8 @@ public class Reservation implements Serializable{
     public Facility getFacility() {
         return facility;
     }
+
+
+
 }
 
