@@ -2,6 +2,7 @@ package org.academiadecodigo.bytenavoid.util;
 
 import org.academiadecodigo.bytenavoid.client.Client;
 import org.academiadecodigo.bytenavoid.facility.Facility;
+import org.academiadecodigo.bytenavoid.reservation.Reservation;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -12,6 +13,7 @@ public class Manager {
 
     private static CopyOnWriteArrayList<Client> clientList;
     private static CopyOnWriteArrayList<Facility> facilities;
+    private static CopyOnWriteArrayList<Reservation> reservations;
 
 
 
@@ -24,10 +26,20 @@ public class Manager {
         return facilities;
     }
 
+    public static CopyOnWriteArrayList<Reservation> getReservations() {
+        return reservations;
+    }
 
     public void init() {
 
+
+        reservations = new CopyOnWriteArrayList<>();
         clientList = new CopyOnWriteArrayList<>();
         facilities = new CopyOnWriteArrayList<>();
+
+        reservations =(CopyOnWriteArrayList<Reservation>) FileManager.loadFile(FileType.RESERVATION);
+        clientList = (CopyOnWriteArrayList<Client>) FileManager.loadFile(FileType.CLIENT);
+        facilities = (CopyOnWriteArrayList<Facility>) FileManager.loadFile(FileType.FACILITY);
+
     }
 }
