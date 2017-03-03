@@ -15,9 +15,6 @@ public class Manager {
     private static CopyOnWriteArrayList<Facility> facilities;
     private static CopyOnWriteArrayList<Reservation> reservations;
 
-
-
-
     public static CopyOnWriteArrayList<Client> getClientList() {
         return clientList;
     }
@@ -30,7 +27,7 @@ public class Manager {
         return reservations;
     }
 
-    public void init() {
+    public static void init() {
 
 
         reservations = new CopyOnWriteArrayList<>();
@@ -41,5 +38,52 @@ public class Manager {
         clientList = (CopyOnWriteArrayList<Client>) FileManager.loadFile(FileType.CLIENT);
         facilities = (CopyOnWriteArrayList<Facility>) FileManager.loadFile(FileType.FACILITY);
 
+
     }
+
+    public static void saveReservations() {
+        FileManager.saveFile(reservations, FileType.RESERVATION);
+    }
+    public static void saveClients() {
+        FileManager.saveFile(clientList, FileType.CLIENT);
+    }
+    public static void saveFacilities() {
+        FileManager.saveFile(facilities, FileType.FACILITY);
+    }
+
+
+    public static void addClientToList(Client client){
+        clientList.add(client);
+        saveClients();
+    }
+
+    public static void addFacilityToList(Facility facility){
+        facilities.add(facility);
+        saveFacilities();
+    }
+
+    public static void addReservationToList(Reservation reservation){
+        reservations.add(reservation);
+        System.out.println("Aqui!");
+
+        saveReservations();
+    }
+
+    public static void removeClient(Client client){
+        clientList.remove(client);
+        saveClients();
+    }
+
+    public static void removeFacility(Facility facility){
+        facilities.remove(facility);
+        saveFacilities();
+    }
+
+    public static void removeReservation(Reservation reservation){
+        reservations.remove(reservation);
+        System.out.println("Aqui!");
+
+        saveReservations();
+    }
+
 }

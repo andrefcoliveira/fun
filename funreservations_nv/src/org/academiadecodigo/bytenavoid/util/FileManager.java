@@ -1,5 +1,7 @@
 package org.academiadecodigo.bytenavoid.util;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -9,9 +11,14 @@ public abstract class FileManager {
 
 //getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
 
+
     public static void saveFile(CopyOnWriteArrayList list, FileType type) {
 
         try {
+
+            File file = new File(type.getFilename());
+            file.delete();
+
 
             ObjectOutputStream oOS = new ObjectOutputStream(new FileOutputStream(type.getFilename()));
 
