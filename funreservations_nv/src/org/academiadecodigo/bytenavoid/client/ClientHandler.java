@@ -2,6 +2,7 @@ package org.academiadecodigo.bytenavoid.client;
 
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
+import org.academiadecodigo.bytenavoid.reservation.Reservation;
 import org.academiadecodigo.bytenavoid.util.Manager;
 
 import java.io.BufferedReader;
@@ -20,16 +21,19 @@ public class ClientHandler {
     private Socket socket;
     private PrintWriter output = null;
     private BufferedReader input = null;
+    private Client client;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
+
         try {
+
             output = new PrintWriter(socket.getOutputStream(), true);
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void startClientAccess() {
@@ -55,17 +59,17 @@ public class ClientHandler {
             default:
                 output.println("Please, choose a valid option. ");
                 startClientAccess();
-
         }
     }
 
-
     public void signUpClient() {
+
         Client client = null;
         String name = "";
         String userName = "";
         String password = "";
         String email = "";
+
         int phoneNumber;
 
         try {
@@ -87,8 +91,7 @@ public class ClientHandler {
             output.println("Welcome to the amazing booking world!");
 
             client = new Client(name, userName, password, email, phoneNumber);
-            Manager.getClientList().add(client);
-
+            Manager.addClientToList(client);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,14 +104,13 @@ public class ClientHandler {
 
         if (username.equals("")) {
             output.println("Please, enter your username: ");
+
             try {
                 username = input.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
 
         if (clientExists(username)) {
             System.out.println("Client Exists");
@@ -143,7 +145,7 @@ public class ClientHandler {
         try {
             output.println("What do you want to do? \n" +
                     "Make a (R)eservation \n" + "(M)anage a reservation \n"
-                    + "(C)ancell a reservation ");
+                    + "(C)ancel a reservation ");
 
             System.out.println("TESTING");
 
@@ -159,19 +161,44 @@ public class ClientHandler {
             case "R":
                 makeReservation();
                 break;
-         /*   case "M":
+            /*case "M":
                 manageReservation();
-                break;
+                break;*/
             case "C":
                 cancelReservation();
                 break;
-                */
+
             default:
                 chooseAction();
         }
     }
 
+    private void cancelReservation() {
+
+        String answer = "";
+        Reservation reservation;
+
+        output.println("Which reservation do you want to cancel: ");
+
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
+                reservation = Manager.getReservations().get(i);
+
+                output.println("(" + i + ") reservation to: " + reservation.getFacility().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+            }
+        }
+        try {
+            answer = input.readLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void makeReservation() {
+
         String answer = "";
         output.println("What kind of facility do you want to book? \n" +
                 "(1) Soccer \n" + "(2) Tennis \n" + "(3) Swimming pool \n" +
@@ -179,9 +206,11 @@ public class ClientHandler {
 
         try {
             answer = input.readLine();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         switch (answer) {
             case "1":
                 choose(FacilityType.SOCCER);
@@ -204,46 +233,43 @@ public class ClientHandler {
                 output.println("Please, enter a valid option.");
                 makeReservation();
         }
-
     }
 
     private void choose(FacilityType facilityType) {
+
         String answer1 = "";
         int counter = 1;
         ArrayList<Integer> facilityPos = new ArrayList<>();
+        ArrayList<Facility> chosenFacilities = new ArrayList<>();
 
         output.println("Which facility would you like to book?");
 
-        System.out.println("TAMANHO DA LISTA " + Manager.getFacilities().size());
-
-
         for (int i = 0; i < Manager.getFacilities().size(); i++) {
-            System.out.println(Manager.getFacilities().get(i).getName());
 
             if (Manager.getFacilities().get(i).getType().equals(facilityType)) {
                 output.println("(" + (counter++) + ") " + Manager.getFacilities().get(i).getName());
                 facilityPos.add(i);
+                chosenFacilities.add(Manager.getFacilities().get(i));
             }
         }
         try {
             answer1 = input.readLine();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < facilityPos.size(); i++) {
+        for (int i = 0; i < chosenFacilities.size(); i++) {
             if (Integer.parseInt(answer1) == (i + 1)) {
-                output.println("You have chosen the facility " + Manager.getFacilities().get(facilityPos.get(i)).getName());
-                chooseMonth(Manager.getFacilities().get(facilityPos.get(i)));
+                output.println("You have chosen the facility " + chosenFacilities.get(i).getName());
+                chooseMonth(chosenFacilities.get(i));
                 break;
             }
-
         }
-
-
     }
 
     private void chooseMonth(Facility facility) {
+
         String month = "";
 
         output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
@@ -261,11 +287,9 @@ public class ClientHandler {
                 chooseMonth(facility);
             }
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void chooseDay(Facility facility, String month) {
@@ -276,7 +300,6 @@ public class ClientHandler {
             day = input.readLine();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
 
         switch (month) {
@@ -310,62 +333,73 @@ public class ClientHandler {
                 output.println("Please, enter a valid option. ");
                 chooseDay(facility, month);
         }
-
-
     }
 
     private void chooseHour(Facility facility, String month, String day) {
+
         String hour = "";
         boolean[] hours = new boolean[24];
         for (boolean b : hours) {
             b = false;
         }
-
-        System.out.println("começa o for?");
         output.println("These are the available hours. Enter your option: ");
         for (int i = 0; i < Manager.getReservations().size(); i++) {
-            System.out.println("Sim");
-            System.out.println("recebe do file: " + Manager.getReservations().get(i).getFacility());
-            System.out.println("recebe do user: " + facility);
-            if (Manager.getReservations().get(i).getFacility().equals(facility)) {
-                System.out.println("Facility");
+
+            if (Manager.getReservations().get(i).getFacility().getName().equals(facility.getName())) {
                 if (Manager.getReservations().get(i).getCalendar().get((Calendar.MONTH)) == Integer.parseInt(month)) {
-                    System.out.println("Mes");
                     if (Manager.getReservations().get(i).getCalendar().get((Calendar.DAY_OF_MONTH)) == Integer.parseInt(day)) {
-
-                        System.out.println("hora");
                         hours[Manager.getReservations().get(i).getCalendar().get(Calendar.HOUR_OF_DAY)] = true;
-
                     }
-
                 }
             }
-
         }
         for (int i = 0; i < hours.length; i++) {
             if (!hours[i]) {
-                output.print(i + " | ");
-                System.out.println(i);
+                output.print("(" + i + ")h00 | ");
             }
         }
         output.println("");
 
+        try {
+            hour = input.readLine();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
+            if (hours[Integer.parseInt(hour)]) {
+                output.println("That time slot is already taken. Please choose another one: ");
+                chooseHour(facility, month, day);
+            } else {
+                createNewReservation(facility, month, day, hour);
+            }
+        } else {
+            output.println("That's not a valid expression");
+            chooseHour(facility, month, day);
+        }
     }
 
+    private void createNewReservation(Facility facility, String month, String day, String hour) {
+
+        Reservation reservation = new Reservation(client, facility, Integer.parseInt(month), Integer.parseInt(day),
+                Integer.parseInt(hour));
+
+        Manager.addReservationToList(reservation);
+        output.println("You have made a new reservation to: " + facility.getName() + " on: " +
+                reservation.getCalendar().getTime());
+    }
 
     private boolean clientExists(String username) {
-        for (Client c : Manager.getClientList()) {
 
+        for (Client c : Manager.getClientList()) {
             if (c.getUserName().equals(username)) {
+                client = c;
                 return true;
             }
         }
         return false;
-
     }
-
 }
 
 
