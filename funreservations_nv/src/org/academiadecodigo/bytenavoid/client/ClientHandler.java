@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by codecadet on 01/03/17.
@@ -313,8 +314,13 @@ public class ClientHandler {
 
     private void chooseHour(Facility facility, String month, String day) {
         String hour = "";
+        int[] hours = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 
-        output.println("We already have this hours reserved for this day. Please ");
+        output.println("These are the available hours. Enter your option: ");
+        for (int i = 0; i < Manager.getFacilities().get(); i++) {
+
+        }
+
 
     }
 
