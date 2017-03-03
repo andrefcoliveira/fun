@@ -1,7 +1,6 @@
 package org.academiadecodigo.bytenavoid.client;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.Serializable;
 
 /**
  * Created by codecadet on 01/03/17.

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -164,7 +163,7 @@ public class ClientHandler {
                 manageReservation();
                 break;
             case "C":
-                cancellReservation();
+                cancelReservation();
                 break;
                 */
             default:
@@ -249,7 +248,7 @@ public class ClientHandler {
 
         output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
                 + "(4) April \n" + "(5) May \n" + "(6) June \n" + "(7) July \n" + "(8) August \n" + "(9) September \n"
-                + "(10) October \n" + "(11) November \n" + "(12) December \n");
+                + "(10) October \n" + "(11) November \n" + "(12) December");
 
         try {
             month = input.readLine();
@@ -257,9 +256,11 @@ public class ClientHandler {
             if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
                 chooseDay(facility, month);
 
+            } else {
+                output.println("Please, choose a valid option");
+                chooseMonth(facility);
             }
-            output.println("Please, choose a valid option");
-            chooseMonth(facility);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -305,9 +306,9 @@ public class ClientHandler {
                 }
                 break;
 
-                default:
-                    output.println("Please, enter a valid option. ");
-                    chooseDay(facility,month);
+            default:
+                output.println("Please, enter a valid option. ");
+                chooseDay(facility, month);
         }
 
 
@@ -315,12 +316,40 @@ public class ClientHandler {
 
     private void chooseHour(Facility facility, String month, String day) {
         String hour = "";
-        int[] hours = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
+        boolean[] hours = new boolean[24];
+        for (boolean b : hours) {
+            b = false;
+        }
 
+        System.out.println("começa o for?");
         output.println("These are the available hours. Enter your option: ");
-        for (int i = 0; i < Manager.getFacilities().get(); i++) {
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+            System.out.println("Sim");
+            System.out.println("recebe do file: " + Manager.getReservations().get(i).getFacility());
+            System.out.println("recebe do user: " + facility);
+            if (Manager.getReservations().get(i).getFacility().equals(facility)) {
+                System.out.println("Facility");
+                if (Manager.getReservations().get(i).getCalendar().get((Calendar.MONTH)) == Integer.parseInt(month)) {
+                    System.out.println("Mes");
+                    if (Manager.getReservations().get(i).getCalendar().get((Calendar.DAY_OF_MONTH)) == Integer.parseInt(day)) {
+
+                        System.out.println("hora");
+                        hours[Manager.getReservations().get(i).getCalendar().get(Calendar.HOUR_OF_DAY)] = true;
+
+                    }
+
+                }
+            }
 
         }
+        for (int i = 0; i < hours.length; i++) {
+            if (!hours[i]) {
+                output.print(i + " | ");
+                System.out.println(i);
+            }
+        }
+        output.println("");
+
 
 
     }

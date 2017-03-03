@@ -34,7 +34,7 @@ public class Manager {
         clientList = new CopyOnWriteArrayList<>();
         facilities = new CopyOnWriteArrayList<>();
 
-        reservations =(CopyOnWriteArrayList<Reservation>) FileManager.loadFile(FileType.RESERVATION);
+        reservations = (CopyOnWriteArrayList<Reservation>) FileManager.loadFile(FileType.RESERVATION);
         clientList = (CopyOnWriteArrayList<Client>) FileManager.loadFile(FileType.CLIENT);
         facilities = (CopyOnWriteArrayList<Facility>) FileManager.loadFile(FileType.FACILITY);
 
@@ -44,42 +44,44 @@ public class Manager {
     public static void saveReservations() {
         FileManager.saveFile(reservations, FileType.RESERVATION);
     }
+
     public static void saveClients() {
         FileManager.saveFile(clientList, FileType.CLIENT);
     }
+
     public static void saveFacilities() {
         FileManager.saveFile(facilities, FileType.FACILITY);
     }
 
 
-    public static void addClientToList(Client client){
+    public static void addClientToList(Client client) {
         clientList.add(client);
         saveClients();
     }
 
-    public static void addFacilityToList(Facility facility){
+    public static void addFacilityToList(Facility facility) {
         facilities.add(facility);
         saveFacilities();
     }
 
-    public static void addReservationToList(Reservation reservation){
+    public static void addReservationToList(Reservation reservation) {
         reservations.add(reservation);
         System.out.println("Aqui!");
 
         saveReservations();
     }
 
-    public static void removeClient(Client client){
+    public static void removeClient(Client client) {
         clientList.remove(client);
         saveClients();
     }
 
-    public static void removeFacility(Facility facility){
+    public static void removeFacility(Facility facility) {
         facilities.remove(facility);
         saveFacilities();
     }
 
-    public static void removeReservation(Reservation reservation){
+    public static void removeReservation(Reservation reservation) {
         reservations.remove(reservation);
         System.out.println("Aqui!");
 
