@@ -5,8 +5,11 @@ import org.academiadecodigo.bytenavoid.client.ClientHandler;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityHandler;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
+import org.academiadecodigo.bytenavoid.reservation.Reservation;
 import org.academiadecodigo.bytenavoid.server.Server;
 import org.academiadecodigo.bytenavoid.util.Manager;
+
+import java.util.Calendar;
 
 /**
  * Created by codecadet on 01/03/17.
@@ -32,6 +35,10 @@ public class Main {
 
         Client client = new Client("adriana", "ahdorneles", "1234", "sdada", 21313);
         Manager.getClientList().add(client);
+
+        Reservation reservation = new Reservation(client, facility, 3, 3, 3);
+        System.out.println(reservation.getCalendar().get((Calendar.HOUR_OF_DAY)));
+
 
 
         Server server = new Server();

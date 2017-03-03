@@ -1,6 +1,5 @@
 package org.academiadecodigo.bytenavoid.client;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
 import org.academiadecodigo.bytenavoid.util.Manager;
@@ -240,9 +239,88 @@ public class ClientHandler {
         for (int i = 0; i < facilityPos.size(); i++) {
             if (Integer.parseInt(answer1) == (i + 1)) {
                 output.println("You have chosen the facility " + Manager.getFacilities().get(facilityPos.get(i)).getName());
+                chooseMonth(Manager.getFacilities().get(facilityPos.get(i)));
+                break;
+            }
+
+        }
+
+
+    }
+
+    private void chooseMonth(Facility facility) {
+        String month = "";
+
+        output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
+                + "(4) April \n" + "(5) May \n" + "(6) June \n" + "(7) July \n" + "(8) August \n" + "(9) September \n"
+                + "(10) October \n" + "(11) November \n" + "(12) December \n");
+
+        try {
+            month = input.readLine();
+
+            if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
+                chooseDay(facility, month);
 
             }
+            output.println("Please, choose a valid option");
+            chooseMonth(facility);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+    }
+
+    private void chooseDay(Facility facility, String month) {
+        String day = "";
+        output.println("Choose a day: ");
+
+        try {
+            day = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
+        switch (month) {
+            case "1":
+            case "3":
+            case "5":
+            case "7":
+            case "8":
+            case "10":
+            case "12":
+                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 31) {
+                    chooseHour(facility, month, day);
+                }
+                break;
+
+            case "2":
+                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 28) {
+                    chooseHour(facility, month, day);
+                }
+                break;
+            case "4":
+            case "6":
+            case "9":
+            case "11":
+                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 30) {
+                    chooseHour(facility, month, day);
+                }
+                break;
+
+                default:
+                    output.println("Please, enter a valid option. ");
+                    chooseDay(facility,month);
+        }
+
+
+    }
+
+    private void chooseHour(Facility facility, String month, String day) {
+        String hour = "";
+
+        output.println("We already have this hours reserved for this day. Please ");
 
     }
 
