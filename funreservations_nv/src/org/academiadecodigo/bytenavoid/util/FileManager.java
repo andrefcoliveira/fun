@@ -1,12 +1,6 @@
 package org.academiadecodigo.bytenavoid.util;
-
-import org.academiadecodigo.bytenavoid.client.Client;
-import org.academiadecodigo.bytenavoid.facility.Facility;
-import org.academiadecodigo.bytenavoid.facility.FacilityType;
-import org.academiadecodigo.bytenavoid.reservation.Reservation;
-
 import java.io.*;
-import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by codecadet on 01/03/17.
@@ -15,7 +9,7 @@ public abstract class FileManager {
 
 //getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
 
-    public static void saveFile(LinkedList list, FileType type) {
+    public static void saveFile(CopyOnWriteArrayList list, FileType type) {
 
         try {
 
@@ -36,17 +30,18 @@ public abstract class FileManager {
 
     }
 
-    public static LinkedList<Object> loadFile(FileType type) {
+    public static CopyOnWriteArrayList loadFile(FileType type) {
 
-        LinkedList<Object> list = null;
+        CopyOnWriteArrayList<Object> list = null;
         try {
             ObjectInputStream oIS = new ObjectInputStream(new FileInputStream(type.getFilename()));
 
-            list = new LinkedList();
+            list = new CopyOnWriteArrayList();
 
             Object obj;
 
             while (!(obj = oIS.readObject()).equals(-1)) {
+
                 list.add(obj);
             }
 
