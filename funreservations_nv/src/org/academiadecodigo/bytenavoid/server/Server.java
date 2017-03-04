@@ -32,7 +32,7 @@ public class Server {
 
         while (true) {
 
-            waitForClient(serverSocket,socket);
+            waitForClient(serverSocket, socket);
 
         }
     }
@@ -73,34 +73,41 @@ public class Server {
                 e.printStackTrace();
             }
 
-            String anwser = "";
+            String answer = "";
 
-            output.println("(C)lient or (F)acility? ");
+            output.println("(C)lient or (F)acility? or e(X)it");
             try {
-                anwser = input.readLine();
+                answer = input.readLine().toUpperCase();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            switch (anwser) {
-                case "C":
-                    ClientHandler clientHandler = new ClientHandler(socket);
-                    clientHandler.startClientAccess();
-                    break;
+            if (!answer.equals("X")) {
 
-                case "F":
-                    FacilityHandler facilityHandler = new FacilityHandler(socket);
-                    facilityHandler.startFacilityAccess();
-                    break;
+                switch (answer) {
+                    case "C":
+                        ClientHandler clientHandler = new ClientHandler(socket);
+                        clientHandler.startClientAccess();
+                        break;
 
-                /*default:
-                    errorMessage();
-*/
+                    case "F":
+                        FacilityHandler facilityHandler = new FacilityHandler(socket);
+                        facilityHandler.startFacilityAccess();
+                        break;
+
+                    case "X":
+                        return;
+
+                    default:
+                        output.println("Please enter a valid option.");
+                        run();
+                }
             }
 
             //closes socket after all methods are out of the stack
             try {
+                output.println("** Exiting... **");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -108,24 +115,7 @@ public class Server {
         }
     }
 }
-    /*  private void closeEverything(Socket socket) {
 
-        for (Socket s: socketList) {
-            try {
-                s.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-*/
 
 
 
