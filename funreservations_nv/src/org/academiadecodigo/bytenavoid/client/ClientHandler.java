@@ -565,7 +565,7 @@ public class ClientHandler {
 
     private void createNewReservation(Facility facility, String month, String day, String hour) {
 
-        Reservation reservation = new Reservation(client, facility, Integer.parseInt(month), Integer.parseInt(day),
+        Reservation reservation = new Reservation(client, facility, Integer.parseInt(month) - 1, Integer.parseInt(day),
                 Integer.parseInt(hour));
 
         Manager.addReservationToList(reservation);
