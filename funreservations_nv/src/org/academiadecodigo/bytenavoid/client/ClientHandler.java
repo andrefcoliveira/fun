@@ -336,14 +336,19 @@ public class ClientHandler {
             output.println("*** Reservation on "
                     + Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility().getName()
                     + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
-                    + " was deleted. ***");
+                    + " was deleted. ***" + "\nPress any key to continue...");
             Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
+            try {
+                input.readLine();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            chooseAction();
         }
     }
 
     private void makeReservation() {
-
-        // TODO: 04/03/17 validate the answers
 
         String answer = "";
         output.println("+-----------------------------------------------------------------------------+\n" +
@@ -384,8 +389,8 @@ public class ClientHandler {
             default:
                 output.println("*** Please, enter a valid option. ***");
                 makeReservation();
+            }
         }
-    }
 
     private void choose(FacilityType facilityType) {
 
@@ -413,7 +418,10 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        if (answer1.equals("M")) {
+        if (!answer1.matches("\\d+")) {
+            output.println("*** Please write a valid answer (a number from the list): ***");
+            choose(facilityType);
+        } else if (answer1.equals("M")) {
             chooseAction();
 
         } else {
@@ -428,8 +436,6 @@ public class ClientHandler {
     }
 
     private void chooseMonth(Facility facility) {
-
-        // TODO: 04/03/17 os meses não estão a bater certo, a opção 3 está a escolher abril
 
         String month = "";
 
