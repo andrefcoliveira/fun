@@ -146,7 +146,7 @@ public class ClientHandler {
         try {
             output.println("What do you want to do? \n" +
                     "Make a (R)eservation \n" + "(M)anage a reservation \n"
-                    + "(C)ancel a reservation ");
+                    + "(C)ancel a reservation \n" + "E(X)it");
 
             System.out.println("TESTING");
 
@@ -158,21 +158,22 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        switch (answer) {
-            case "R":
-                makeReservation();
-                break;
-            case "M":
-                manageReservation();
-                break;
-            case "C":
-                cancelReservation();
-                break;
-
-            // TODO: 04/03/17 Acrescentar um e(X)it option que funcione
-
-            default:
-                chooseAction();
+        if (answer.equals("X")) {
+            output.println("Have a nice day!!! Byeeeee...");
+        } else {
+            switch (answer) {
+                case "R":
+                    makeReservation();
+                    break;
+                case "M":
+                    manageReservation();
+                    break;
+                case "C":
+                    cancelReservation();
+                    break;
+                default:
+                    chooseAction();
+            }
         }
     }
 
@@ -183,7 +184,7 @@ public class ClientHandler {
         int counter = 1;
         ArrayList<Integer> auxIndexList = new ArrayList<>();
 
-        output.println("Which reservation do you want to modify: ");
+        output.println("Which reservation do you want to modify: \n(M)ain menu");
 
         for (int i = 0; i < Manager.getReservations().size(); i++) {
 
@@ -201,7 +202,9 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (!answer.matches("\\d+")) {
+        if (answer.equals("M")) {
+            chooseAction();
+        } else if (!answer.matches("\\d+")) {
             output.println("Please write a valid answer (a number from the list): ");
             cancelReservation();
         } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
@@ -237,7 +240,7 @@ public class ClientHandler {
         int counter = 1;
         ArrayList<Integer> auxIndexList = new ArrayList<>();
 
-        output.println("Which reservation do you want to cancel: ");
+        output.println("Which reservation do you want to cancel: \n(M)ain menu");
 
         for (int i = 0; i < Manager.getReservations().size(); i++) {
 
@@ -255,7 +258,9 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (!answer.matches("\\d+")) {
+        if (answer.equals("M")) {
+            chooseAction();
+        } else if (!answer.matches("\\d+")) {
             output.println("Please write a valid answer (a number from the list): ");
             cancelReservation();
         } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
@@ -278,6 +283,7 @@ public class ClientHandler {
 
         String answer = "";
         output.println("What kind of facility do you want to book? \n" +
+                "(M)ain menu\n" +
                 "(1) Soccer \n" + "(2) Tennis \n" + "(3) Swimming pool \n" +
                 "(4) Volley \n" + "(5) Running \n" + "(6) Sports Space ");
 
@@ -289,6 +295,9 @@ public class ClientHandler {
         }
 
         switch (answer) {
+            case "M":
+                chooseAction();
+                break;
             case "1":
                 choose(FacilityType.SOCCER);
                 break;
@@ -306,6 +315,7 @@ public class ClientHandler {
                 break;
             case "6":
                 choose(FacilityType.SPORTSSPACE);
+                break;
             default:
                 output.println("Please, enter a valid option.");
                 makeReservation();
@@ -318,7 +328,7 @@ public class ClientHandler {
         int counter = 1;
         ArrayList<Facility> chosenFacilities = new ArrayList<>();
 
-        output.println("Which facility would you like to book?");
+        output.println("Which facility would you like to book? \n(M)ain menu");
 
         for (int i = 0; i < Manager.getFacilities().size(); i++) {
 
@@ -329,16 +339,19 @@ public class ClientHandler {
         }
         try {
             answer1 = input.readLine();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < chosenFacilities.size(); i++) {
-            if (Integer.parseInt(answer1) == (i + 1)) {
-                output.println("You have chosen the facility " + chosenFacilities.get(i).getName());
-                chooseMonth(chosenFacilities.get(i));
-                break;
+        if (answer1.equals("M")) {
+            chooseAction();
+        } else {
+            for (int i = 0; i < chosenFacilities.size(); i++) {
+                if (Integer.parseInt(answer1) == (i + 1)) {
+                    output.println("You have chosen the facility " + chosenFacilities.get(i).getName());
+                    chooseMonth(chosenFacilities.get(i));
+                    break;
+                }
             }
         }
     }
@@ -350,12 +363,15 @@ public class ClientHandler {
 
         output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
                 + "(4) April \n" + "(5) May \n" + "(6) June \n" + "(7) July \n" + "(8) August \n" + "(9) September \n"
-                + "(10) October \n" + "(11) November \n" + "(12) December");
+                + "(10) October \n" + "(11) November \n" + "(12) December\n" + "(M)ain menu");
 
         try {
             month = input.readLine();
 
-            if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
+            if (month.equals("M")) {
+                chooseAction();
+
+            } else if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
                 chooseDay(facility, month);
 
             } else {
@@ -370,7 +386,7 @@ public class ClientHandler {
 
     private void chooseDay(Facility facility, String month) {
         String day = "";
-        output.println("Choose a day: ");
+        output.println("Choose a day: \n" + "(M)ain menu");
 
         try {
             day = input.readLine();
@@ -379,6 +395,9 @@ public class ClientHandler {
         }
 
         switch (month) {
+            case "M":
+                chooseAction();
+                break;
             case "1":
             case "3":
             case "5":
@@ -418,7 +437,7 @@ public class ClientHandler {
         for (boolean b : hours) {
             b = false;
         }
-        output.println("These are the available hours. Enter your option: ");
+        output.println("These are the available hours. Enter your option: " + "\n(M)ain menu");
         for (int i = 0; i < Manager.getReservations().size(); i++) {
 
             if (Manager.getReservations().get(i).getFacility().getName().equals(facility.getName())) {
@@ -443,7 +462,9 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
+        if (hour.equals("M")) {
+            chooseAction();
+        } else if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
             if (hours[Integer.parseInt(hour)]) {
                 output.println("That time slot is already taken. Please choose another one: ");
                 chooseHour(facility, month, day);
@@ -464,11 +485,23 @@ public class ClientHandler {
         Manager.addReservationToList(reservation);
 
         if (!isNewReservation) {
-            output.println("You have changed your reservation on " + facility.getName() + " to " + reservation.getCalendar().getTime());
+            output.println("You have changed your reservation on " + facility.getName() + " to "
+                    + reservation.getCalendar().getTime() + "\nPress any key to continue...");
+            try {
+                input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            chooseAction();
         } else {
             output.println("You have made a new reservation to: " + facility.getName() + " on: " +
-                    reservation.getCalendar().getTime());
-            // TODO: 04/03/17 make new reservation cancel reservation or exit, pudemos chamar o method chooseAction e acrescentar-lhe um e(X)it
+                    reservation.getCalendar().getTime() + "\nPress any key to continue...");
+            try {
+                input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            chooseAction();
         }
     }
 
