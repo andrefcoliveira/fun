@@ -48,8 +48,8 @@ public class FacilityHandler {
 
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                       Please, enter your facility ID:                       |\n" +
-                           "+-----------------------------------------------------------------------------+\n");
+                    "|                       Please, enter your facility ID:                       |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
             idString = input.readLine();
             if (idString.matches("^[a-zA-Z]+$")) {
 
@@ -83,8 +83,8 @@ public class FacilityHandler {
     private boolean askPw(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                            Enter your password:                             |\n" +
-                           "+-----------------------------------------------------------------------------+\n");
+                    "|                            Enter your password:                             |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
             String pass = input.readLine();
 
             if (passAttempt == 3) {
@@ -108,7 +108,7 @@ public class FacilityHandler {
         try {
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                            Management Options:                              |\n" +
+                    "|                            Management Options:                              |\n" +
                     "+-----------------------------------------------------------------------------+\n");
             output.println("- Manage (R)eservations \n" +
                     "- Manage (I)nfo\n" +
@@ -140,7 +140,7 @@ public class FacilityHandler {
         try {
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                     Reservations Management Options:                        |\n" +
+                    "|                     Reservations Management Options:                        |\n" +
                     "+-----------------------------------------------------------------------------+\n");
             output.println("- (N)ew Reservation\n" +
                     "- (C)heck Current Reservations\n" +
@@ -178,7 +178,7 @@ public class FacilityHandler {
     private void deleteReservation(Facility facility) {
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                           Deleting Reservation                              |\n" +
+                "|                           Deleting Reservation                              |\n" +
                 "+-----------------------------------------------------------------------------+\n");
 
         Reservation reservation;
@@ -190,7 +190,7 @@ public class FacilityHandler {
             if (Manager.getReservations().get(i).getFacility().getID() == (facility.getID())) {
                 reservation = Manager.getReservations().get(i);
 
-                output.println("(" + i + ") reservation from: " + reservation.getClient().getName() + " on: " +
+                output.println("(" + (i+1) + ") reservation from: " + reservation.getClient().getName() + " on: " +
                         reservation.getCalendar().getTime());
             }
         }
@@ -202,7 +202,7 @@ public class FacilityHandler {
                 if (Manager.getReservations().get(i).getFacility().getID() == Manager.getReservations().get(answer).getFacility().getID()) {
                     Manager.removeReservation(Manager.getReservations().get(i));
                     output.println("Reservation Deleted...");
-                    manageOptions(facility);
+                    manageReservations(facility);
                 }
             }
 
@@ -215,7 +215,7 @@ public class FacilityHandler {
     private void checkCurrentReservations(Facility facility) {
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                      Checking Current Reservations                          |\n" +
+                "|                      Checking Current Reservations                          |\n" +
                 "+-----------------------------------------------------------------------------+\n");
 
         Reservation reservation;
@@ -225,11 +225,11 @@ public class FacilityHandler {
             if (Manager.getReservations().get(i).getFacility().getID() == (facility.getID())) {
                 reservation = Manager.getReservations().get(i);
 
-                output.println("(" + i + ") reservation from: " + reservation.getClient().getName() + " on: " +
+                output.println("(" + (i+1) + ") reservation from: " + reservation.getClient().getName() + " on: " +
                         reservation.getCalendar().getTime());
             }
         }
-        manageOptions(facility);
+        manageReservations(facility);
     }
 
     private void makeNewFacilityReservation(Facility facility) {
@@ -243,7 +243,11 @@ public class FacilityHandler {
 
         try {
 
-            output.println("**** Facility Management Options: ****\n\n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                      Facility Management Options:                           |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            output.println("- (C)urrent Information\n" +
                     "- Update (N)ame\n" +
                     "- Update Password(PW) \n" +
                     "- Update (I)nfo\n" +
@@ -255,6 +259,8 @@ public class FacilityHandler {
 
             switch (manageInfoChoice) {
 
+                case "C":
+                    showInfo(facility);
                 case "N":
                     updateName(facility);
                     break;
@@ -271,7 +277,7 @@ public class FacilityHandler {
                     updatePhone(facility);
                     break;
                 case "B":
-                    manageReservations(facility);
+                    manageOptions(facility);
                     break;
                 default:
                     output.println("Invalid Command!\n\n");
@@ -284,12 +290,28 @@ public class FacilityHandler {
 
     }
 
+    private void showInfo(Facility facility) {
+
+        output.println("+-----------------------------------------------------------------------------+\n" +
+                "|                         Current Facility Information                        |\n" +
+                "+-----------------------------------------------------------------------------+\n" +
+                "- Current ID: " + facility.getID() + "\n" +
+                "- Current Name: " + facility.getName() + "\n" +
+                "- Current Phone: " + facility.getPhone() + "\n" +
+                "- Current Address: " + facility.getAddress() + "\n" +
+                "- Current Info: " + facility.getInfo() + "\n");
+
+        manageInfo(facility);
+
+    }
+
     private volatile String phoneString;
+
     private void updatePhone(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                            Update Facility Phone                            |\n" +
-                           "+-----------------------------------------------------------------------------+\n"+
+                    "|                            Update Facility Phone                            |\n" +
+                    "+-----------------------------------------------------------------------------+\n" +
                     "- Current Phone: " + facility.getPhone() + "\n" +
                     "- New Phone: ");
 
@@ -310,8 +332,11 @@ public class FacilityHandler {
 
     private void updateAddress(Facility facility) {
         try {
-            output.println("** Update Facility Address **\n" +
-                    "- Current Address: " + facility.getAddress() + "\n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                         Update Facility Address                             |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            output.println("- Current Address: " + facility.getAddress() + "\n" +
                     "- New Address: ");
 
             facility.setAddress(input.readLine());
@@ -323,8 +348,11 @@ public class FacilityHandler {
 
     private void updateInfo(Facility facility) {
         try {
-            output.println("** Update Facility Info **\n" +
-                    "- Current Info: " + facility.getInfo() + "\n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                          Update Facility Info                               |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            output.println("- Current Info: " + facility.getInfo() + "\n" +
                     "- New Info: ");
 
             facility.setInfo(input.readLine());
@@ -336,8 +364,11 @@ public class FacilityHandler {
 
     private void updatePw(Facility facility) {
         try {
-            output.println("** Update Login Password **\n" +
-                    "- New Password: ");
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                          Update Login Password                              |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            output.println("- New Password: ");
 
             facility.setPw(input.readLine());
             manageInfo(facility);
@@ -348,8 +379,11 @@ public class FacilityHandler {
 
     private void updateName(Facility facility) {
         try {
-            output.println("** Update Facility Name **\n" +
-                    "- Current Name: " + facility.getName() + "\n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                           Update Facility Name                              |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            output.println("- Current Name: " + facility.getName() + "\n" +
                     "- New Name: ");
 
             facility.setName(input.readLine());
