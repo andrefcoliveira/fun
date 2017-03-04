@@ -43,6 +43,7 @@ public class ClientHandler {
         String answer = "";
 
         output.println("(L)og In or (S)ign Up? ");
+
         try {
             answer = input.readLine().toUpperCase();
         } catch (IOException e) {
@@ -75,6 +76,7 @@ public class ClientHandler {
         int phoneNumber;
 
         try {
+
             output.println("Please, enter your name: ");
             name = input.readLine();
 
@@ -98,9 +100,7 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 
     private void logInClient(String username) {
 
@@ -181,10 +181,7 @@ public class ClientHandler {
                     "Make a (R)eservation \n" + "(M)anage a reservation \n"
                     + "(C)ancel a reservation \n" + "E(X)it");
 
-            System.out.println("TESTING");
-
-            answer = input.readLine();
-            System.out.println("ANSWER " + answer);
+            answer = input.readLine().toUpperCase();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -192,6 +189,7 @@ public class ClientHandler {
 
         if (answer.equals("X")) {
             output.println("Have a nice day!!! Byeeeee...");
+
         } else {
             switch (answer) {
                 case "R":
@@ -237,29 +235,35 @@ public class ClientHandler {
         }
         if (answer.equals("M")) {
             chooseAction();
-        } else if (!answer.matches("\\d+")) {
-            output.println("Please write a valid answer (a number from the list): ");
-            cancelReservation();
-        } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
-            output.println("Please write a valid answer (a number from the list): ");
-            cancelReservation();
-        } else {
+
+        } else if (answer.matches("[0-9]+")) {
             System.out.println(answer);
-            int numAnswer = Integer.parseInt(answer) - 1;
-            System.out.println(numAnswer);
-            facility = Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility();
+            int numAnswer = Integer.parseInt(answer);
+            if (numAnswer < 1 || numAnswer > auxIndexList.size()) {
+                output.println("Please write a valid answer (a number from the list): ");
+                manageReservation();
+            } else {
+                numAnswer--;
+                facility = Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility();
 
-            output.println("Please, manage your reservation: \n ");
+                output.println("Please, manage your reservation: \n ");
 
-            output.println("Reservation on "
-                    + facility.getName()
-                    + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
-                    + " was chosen to be managed.");
+                output.println("Reservation on "
+                        + facility.getName()
+                        + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
+                        + " was chosen to be managed.");
 
-            isNewReservation = false;
-            Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
-            chooseMonth(facility);
+                isNewReservation = false;
+                Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
+                chooseMonth(facility);
+            }
+
+
+        } else {
+            output.println("Please write a valid answer (a number from the list): ");
+            manageReservation();
         }
+
     }
 
     private void cancelReservation() {
@@ -313,6 +317,8 @@ public class ClientHandler {
     }
 
     private void makeReservation() {
+
+        // TODO: 04/03/17 validate the answers
 
         String answer = "";
         output.println("What kind of facility do you want to book? \n" +
