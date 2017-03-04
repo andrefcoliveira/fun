@@ -89,7 +89,7 @@ public class Server {
                     clientHandler.startClientAccess();
                     break;
 
-                case "E":
+                case "F":
                     FacilityHandler facilityHandler = new FacilityHandler(socket);
                     facilityHandler.startFacilityAccess();
                     break;

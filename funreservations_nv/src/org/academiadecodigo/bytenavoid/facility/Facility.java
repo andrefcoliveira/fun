@@ -18,8 +18,6 @@ public class Facility implements Serializable {
     private int phone;
     private String pw;
 
-
-
     public Facility(int ID, String pw, FacilityType type, String name, String address, int phone, String info){
 
         this.ID = ID;

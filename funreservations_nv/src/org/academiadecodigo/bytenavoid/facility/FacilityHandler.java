@@ -1,6 +1,8 @@
 package org.academiadecodigo.bytenavoid.facility;
 
 
+import org.academiadecodigo.bytenavoid.client.ClientHandler;
+import org.academiadecodigo.bytenavoid.reservation.Reservation;
 import org.academiadecodigo.bytenavoid.util.Manager;
 
 import java.io.*;
@@ -14,6 +16,7 @@ public class FacilityHandler {
     private Socket socket;
     private PrintWriter output = null;
     private BufferedReader input = null;
+    private ClientHandler clientHandler;
 
     public FacilityHandler(Socket socket) {
         this.socket = socket;
@@ -25,11 +28,6 @@ public class FacilityHandler {
         }
     }
 
-
-    /**
-     * ask user id, verify if exists into list, if yes ask for pass
-     * if no re-ask for user
-     */
 
     public void startFacilityAccess() {
 
@@ -160,13 +158,60 @@ public class FacilityHandler {
 
     private void deleteReservation(Facility facility) {
 
+        output.println("** Deleting Reservation **\n\n");
+
+        Reservation reservation;
+
+        output.println("Choose Reservation to delete: ");
+
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getFacility().getID() == (facility.getID())) {
+                reservation = Manager.getReservations().get(i);
+
+                output.println("(" + i + ") reservation from: " + reservation.getClient().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+            }
+        }
+        try {
+           int answer = Integer.parseInt(input.readLine());
+
+            for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+                if (Manager.getReservations().get(i).getFacility().getID() == Manager.getReservations().get(answer).getFacility().getID()) {
+                    Manager.removeReservation(Manager.getReservations().get(i));
+                    output.println("Reservation Deleted...");
+                    manageOptions(facility);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void checkCurrentReservations(Facility facility) {
 
+        output.println("** Checking Current Reservations **\n\n");
+
+        Reservation reservation;
+
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getFacility().getID() == (facility.getID())) {
+                reservation = Manager.getReservations().get(i);
+
+                output.println("(" + i + ") reservation from: " + reservation.getClient().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+            }
+        }
+        manageOptions(facility);
     }
 
     private void makeNewFacilityReservation(Facility facility) {
+        output.println("** Redirecting to Client Mode **\n\n");
+        clientHandler.startClientAccess();
     }
 
     private void manageInfo(Facility facility) {
@@ -221,6 +266,7 @@ public class FacilityHandler {
                     "- New Address: ");
 
             facility.setAddress(input.readLine());
+            manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -232,7 +278,8 @@ public class FacilityHandler {
                     "- Current Address: " + facility.getAddress()+"\n" +
                     "- New Address: ");
 
-                facility.setAddress(input.readLine());
+            facility.setAddress(input.readLine());
+            manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -241,10 +288,11 @@ public class FacilityHandler {
     private void updateInfo(Facility facility) {
         try{
             output.println("** Update Facility Info **\n" +
-                    "- Current Address: " + facility.getAddress()+"\n" +
-                    "- New Address: ");
+                    "- Current Info: " + facility.getAddress()+"\n" +
+                    "- New Info: ");
 
             facility.setInfo(input.readLine());
+            manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -256,6 +304,7 @@ public class FacilityHandler {
                     "- New Password: ");
 
             facility.setPw(input.readLine());
+            manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,6 +317,7 @@ public class FacilityHandler {
                     "- New Name: ");
 
             facility.setName(input.readLine());
+            manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
         }

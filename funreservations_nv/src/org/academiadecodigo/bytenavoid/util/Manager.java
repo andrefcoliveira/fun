@@ -29,7 +29,6 @@ public class Manager {
 
     public static void init() {
 
-
         reservations = new CopyOnWriteArrayList<>();
         clientList = new CopyOnWriteArrayList<>();
         facilities = new CopyOnWriteArrayList<>();
@@ -37,7 +36,6 @@ public class Manager {
         reservations = (CopyOnWriteArrayList<Reservation>) FileManager.loadFile(FileType.RESERVATION);
         clientList = (CopyOnWriteArrayList<Client>) FileManager.loadFile(FileType.CLIENT);
         facilities = (CopyOnWriteArrayList<Facility>) FileManager.loadFile(FileType.FACILITY);
-
 
     }
 
@@ -66,8 +64,6 @@ public class Manager {
 
     public static void addReservationToList(Reservation reservation) {
         reservations.add(reservation);
-        System.out.println("Aqui!");
-
         saveReservations();
     }
 
@@ -83,8 +79,6 @@ public class Manager {
 
     public static void removeReservation(Reservation reservation) {
         reservations.remove(reservation);
-        System.out.println("Aqui!");
-
         saveReservations();
     }
 

@@ -4,13 +4,11 @@ import org.academiadecodigo.bytenavoid.client.Client;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
 import org.academiadecodigo.bytenavoid.reservation.Reservation;
-import org.academiadecodigo.bytenavoid.util.FileManager;
-import org.academiadecodigo.bytenavoid.util.FileType;
 import org.academiadecodigo.bytenavoid.util.Manager;
 
+import java.io.Console;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.concurrent.CopyOnWriteArrayList;
+
 
 /**
  * Created by codecadet on 02/03/17.
@@ -21,16 +19,22 @@ public class Test {
 
     public static void main(String[] args) {
 
+        /*Console console = System.console();
+
+        char[] pass = console.readPassword();
+
+        System.out.println(pass);*/
+
         Manager.init();
 
-        /*Client client = new Client("adriana", "ahdorneles", "1234", "sdada", 21313);
+        Client client = new Client("adriana", "ahdorneles", "1234", "sdada", 21313);
         Manager.addClientToList(client);
 
-        Facility facility = new Facility(2313, FacilityType.SOCCER, "facility1", "facility1", 32434, "facility1");
-        Facility facility2 = new Facility(3424, FacilityType.SOCCER, "facility2", "facility2", 32434, "facility2");
-        Facility facility3 = new Facility(25, FacilityType.SWIMMINGPOOL, "facility3", "facility3", 32434, "facility3");
-        Facility facility4 = new Facility(646, FacilityType.SOCCER, "facility4", "facility4", 32434, "facility4");
-        Facility facility5 = new Facility(232, FacilityType.SOCCER, "facility5", "facility5", 32434, "facility5");
+        Facility facility = new Facility(1, "123456", FacilityType.SOCCER, "facility1", "facility1", 32434, "facility1");
+        Facility facility2 = new Facility(2, "123456", FacilityType.SOCCER, "facility2", "facility2", 32434, "facility2");
+        Facility facility3 = new Facility(3, "123456", FacilityType.SWIMMINGPOOL, "facility3", "facility3", 32434, "facility3");
+        Facility facility4 = new Facility(4, "123456", FacilityType.SOCCER, "facility4", "facility4", 32434, "facility4");
+        Facility facility5 = new Facility(5, "123456", FacilityType.SOCCER, "facility5", "facility5", 32434, "facility5");
 
         Manager.addFacilityToList(facility);
         Manager.addFacilityToList(facility2);
@@ -50,7 +54,9 @@ public class Test {
         Manager.addReservationToList(reservation);
         Manager.addReservationToList(reservation1);
         Manager.addReservationToList(reservation2);
-        Manager.addReservationToList(reservation3);*/
+        Manager.addReservationToList(reservation3);
+
+
   /*       Reservation reservation = new Reservation(new Client("armando", "Armando", "ARMANDO", "armando@armando", 919191919),
                 new Facility(1, FacilityType.RUNNING, "run bitch", "rua do run", 1234, "poo caralho!!"), 2, 3, 12);
 
@@ -76,7 +82,7 @@ public class Test {
 
         Manager.addReservationToList(reservation);
         Manager.addReservationToList(new Reservation(new Client("armandordh<aetg", "Armando", "ARMANDO", "armando@armando", 919191919),
-                new Facility(1, FacilityType.RUNNING, "run bitch", "rua do run", 1234, "poo caralho!!"), 2, 3, 12));*/
+                new Facility(1, FacilityType.RUNNING, "run bitch", "rua do run", 1234, "poo caralho!!"), 2, 3, 12));
 
         CopyOnWriteArrayList<Object> list = FileManager.loadFile(FileType.RESERVATION);
 
@@ -86,6 +92,7 @@ public class Test {
             System.out.println();
         }
 
+        */
 
 
         /*for (Reservation c: Manager.getReservations()) {
@@ -99,4 +106,6 @@ public class Test {
         }*/
 
     }
+
+
 }
