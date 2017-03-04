@@ -3,10 +3,7 @@ package org.academiadecodigo.bytenavoid.facility;
 
 import org.academiadecodigo.bytenavoid.util.Manager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -201,7 +198,7 @@ public class FacilityHandler {
                     updateAddress(facility);
                     break;
                 case "P":
-                    updateAddress(facility);
+                    updatePhone(facility);
                     break;
                 case "B":
                     manageReservations(facility);
@@ -217,20 +214,63 @@ public class FacilityHandler {
 
     }
 
-    private void updateAddress(Facility facility) {
+    private void updatePhone(Facility facility) {
+        try{
+            output.println("** Update Facility Phone **\n" +
+                    "- Current Phone: " + facility.getAddress()+"\n" +
+                    "- New Address: ");
 
+            facility.setAddress(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateAddress(Facility facility) {
+        try{
+            output.println("** Update Facility Address **\n" +
+                    "- Current Address: " + facility.getAddress()+"\n" +
+                    "- New Address: ");
+
+                facility.setAddress(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateInfo(Facility facility) {
+        try{
+            output.println("** Update Facility Info **\n" +
+                    "- Current Address: " + facility.getAddress()+"\n" +
+                    "- New Address: ");
 
+            facility.setInfo(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updatePw(Facility facility) {
+        try{
+            output.println("** Update Login Password **\n" +
+                    "- New Password: ");
 
+            facility.setPw(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateName(Facility facility) {
+        try{
+            output.println("** Update Facility Name **\n" +
+                    "- Current Name: " + facility.getAddress()+"\n" +
+                    "- New Name: ");
 
+            facility.setName(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
