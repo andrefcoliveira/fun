@@ -22,6 +22,7 @@ public class ClientHandler {
     private PrintWriter output = null;
     private BufferedReader input = null;
     private Client client;
+    private boolean isNewReservation = true;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -161,9 +162,9 @@ public class ClientHandler {
             case "R":
                 makeReservation();
                 break;
-            /*case "M":
+            case "M":
                 manageReservation();
-                break;*/
+                break;
             case "C":
                 cancelReservation();
                 break;
@@ -173,6 +174,60 @@ public class ClientHandler {
             default:
                 chooseAction();
         }
+    }
+
+    private void manageReservation() {
+        String answer = "";
+        Reservation reservation;
+        Facility facility;
+        int counter = 1;
+        ArrayList<Integer> auxIndexList = new ArrayList<>();
+
+        output.println("Which reservation do you want to modify: ");
+
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
+                reservation = Manager.getReservations().get(i);
+
+                auxIndexList.add(i);
+                output.println("(" + counter++ + ") reservation to: " + reservation.getFacility().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+
+            }
+        }
+        try {
+            answer = input.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!answer.matches("\\d+")) {
+            output.println("Please write a valid answer (a number from the list): ");
+            cancelReservation();
+        } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
+            output.println("Please write a valid answer (a number from the list): ");
+            cancelReservation();
+        } else {
+            System.out.println(answer);
+            int numAnswer = Integer.parseInt(answer) - 1;
+            System.out.println(numAnswer);
+            facility = Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility();
+
+            output.println("Please, manage your reservation: \n ");
+
+            output.println("Reservation on "
+                    + facility.getName()
+                    + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
+                    + " was chosen to be managed.");
+
+            isNewReservation = false;
+            Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
+            chooseMonth(facility);
+
+
+        }
+
+
     }
 
     private void cancelReservation() {
@@ -200,7 +255,7 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (!answer.matches("\\d+")){
+        if (!answer.matches("\\d+")) {
             output.println("Please write a valid answer (a number from the list): ");
             cancelReservation();
         } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
@@ -407,9 +462,14 @@ public class ClientHandler {
                 Integer.parseInt(hour));
 
         Manager.addReservationToList(reservation);
-        output.println("You have made a new reservation to: " + facility.getName() + " on: " +
-                reservation.getCalendar().getTime());
-        // TODO: 04/03/17 make new reservation cancel reservation or exit, pudemos chamar o method chooseAction e acrescentar-lhe um e(X)it
+
+        if (!isNewReservation) {
+            output.println("You have changed your reservation on " + facility.getName() + " to " + reservation.getCalendar().getTime());
+        } else {
+            output.println("You have made a new reservation to: " + facility.getName() + " on: " +
+                    reservation.getCalendar().getTime());
+            // TODO: 04/03/17 make new reservation cancel reservation or exit, pudemos chamar o method chooseAction e acrescentar-lhe um e(X)it
+        }
     }
 
     private boolean clientExists(String username) {
