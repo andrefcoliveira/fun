@@ -98,6 +98,13 @@ public class Server {
                     errorMessage();
 */
             }
+
+            //closes socket after all methods are out of the stack
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

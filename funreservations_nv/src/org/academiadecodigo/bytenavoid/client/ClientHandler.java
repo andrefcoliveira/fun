@@ -168,6 +168,8 @@ public class ClientHandler {
                 cancelReservation();
                 break;
 
+            // TODO: 04/03/17 Acrescentar um e(X)it option que funcione
+
             default:
                 chooseAction();
         }
@@ -177,6 +179,8 @@ public class ClientHandler {
 
         String answer = "";
         Reservation reservation;
+        int counter = 1;
+        ArrayList<Integer> auxIndexList = new ArrayList<>();
 
         output.println("Which reservation do you want to cancel: ");
 
@@ -185,16 +189,34 @@ public class ClientHandler {
             if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
                 reservation = Manager.getReservations().get(i);
 
-                output.println("(" + i + ") reservation to: " + reservation.getFacility().getName() + " on: " +
+                auxIndexList.add(i);
+                output.println("(" + counter++ + ") reservation to: " + reservation.getFacility().getName() + " on: " +
                         reservation.getCalendar().getTime());
+
             }
         }
         try {
             answer = input.readLine();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (!answer.matches("\\d+")){
+            output.println("Please write a valid answer (a number from the list): ");
+            cancelReservation();
+        } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
+            output.println("Please write a valid answer (a number from the list): ");
+            cancelReservation();
+        } else {
+            System.out.println(answer);
+            int numAnswer = Integer.parseInt(answer) - 1;
+            System.out.println(numAnswer);
+            output.println("Reservation on "
+                    + Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility().getName()
+                    + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
+                    + " was deleted.");
+            Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
+        }
+
     }
 
     private void makeReservation() {
@@ -239,7 +261,6 @@ public class ClientHandler {
 
         String answer1 = "";
         int counter = 1;
-        ArrayList<Integer> facilityPos = new ArrayList<>();
         ArrayList<Facility> chosenFacilities = new ArrayList<>();
 
         output.println("Which facility would you like to book?");
@@ -248,7 +269,6 @@ public class ClientHandler {
 
             if (Manager.getFacilities().get(i).getType().equals(facilityType)) {
                 output.println("(" + (counter++) + ") " + Manager.getFacilities().get(i).getName());
-                facilityPos.add(i);
                 chosenFacilities.add(Manager.getFacilities().get(i));
             }
         }
@@ -270,6 +290,7 @@ public class ClientHandler {
 
     private void chooseMonth(Facility facility) {
 
+        // TODO: 04/03/17 os meses não estão a bater certo, a opção 3 está a escolher abril
         String month = "";
 
         output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
@@ -388,6 +409,7 @@ public class ClientHandler {
         Manager.addReservationToList(reservation);
         output.println("You have made a new reservation to: " + facility.getName() + " on: " +
                 reservation.getCalendar().getTime());
+        // TODO: 04/03/17 make new reservation cancel reservation or exit, pudemos chamar o method chooseAction e acrescentar-lhe um e(X)it
     }
 
     private boolean clientExists(String username) {
