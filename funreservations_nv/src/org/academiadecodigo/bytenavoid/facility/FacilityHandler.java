@@ -42,11 +42,24 @@ public class FacilityHandler {
     }
 
 
+    private volatile String idString;
+
     private Facility askID() {
 
         try {
-            output.println("Please, enter your facility ID:");
-            int id = Integer.parseInt(input.readLine());
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                       Please, enter your facility ID:                       |\n" +
+                           "+-----------------------------------------------------------------------------+\n");
+            idString = input.readLine();
+            if (idString.matches("^[a-zA-Z]+$")) {
+
+                askID();
+            }
+            int id = Integer.parseInt(idString);
+
+
+            System.out.println(idString);
+            System.out.println(id);
 
             for (Facility fac : Manager.getFacilities()) {
 
@@ -69,7 +82,9 @@ public class FacilityHandler {
 
     private boolean askPw(Facility facility) {
         try {
-            output.println("Enter your password: ");
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                            Enter your password:                             |\n" +
+                           "+-----------------------------------------------------------------------------+\n");
             String pass = input.readLine();
 
             if (passAttempt == 3) {
@@ -92,8 +107,10 @@ public class FacilityHandler {
 
         try {
 
-            output.println("**** Available Options: ****\n\n" +
-                    "- Manage (R)eservations \n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                            Management Options:                              |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+            output.println("- Manage (R)eservations \n" +
                     "- Manage (I)nfo\n" +
                     "- (L)ogOut");
             String manageChoice = input.readLine();
@@ -120,17 +137,19 @@ public class FacilityHandler {
 
     private void manageReservations(Facility facility) {
 
-        try{
+        try {
 
-            output.println("**** Reservations Management Options: ****\n\n" +
-                    "- (N)ew Reservation\n" +
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                     Reservations Management Options:                        |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+            output.println("- (N)ew Reservation\n" +
                     "- (C)heck Current Reservations\n" +
                     "- (D)elete Reservation\n" +
                     "- Go (B)ack");
 
             String manageReservationChoice = input.readLine();
 
-            switch (manageReservationChoice){
+            switch (manageReservationChoice) {
 
                 case "N":
                     makeNewFacilityReservation(facility);
@@ -158,7 +177,9 @@ public class FacilityHandler {
 
     private void deleteReservation(Facility facility) {
 
-        output.println("** Deleting Reservation **\n\n");
+        output.println("+-----------------------------------------------------------------------------+\n" +
+                       "|                           Deleting Reservation                              |\n" +
+                "+-----------------------------------------------------------------------------+\n");
 
         Reservation reservation;
 
@@ -174,7 +195,7 @@ public class FacilityHandler {
             }
         }
         try {
-           int answer = Integer.parseInt(input.readLine());
+            int answer = Integer.parseInt(input.readLine());
 
             for (int i = 0; i < Manager.getReservations().size(); i++) {
 
@@ -193,7 +214,9 @@ public class FacilityHandler {
 
     private void checkCurrentReservations(Facility facility) {
 
-        output.println("** Checking Current Reservations **\n\n");
+        output.println("+-----------------------------------------------------------------------------+\n" +
+                       "|                      Checking Current Reservations                          |\n" +
+                "+-----------------------------------------------------------------------------+\n");
 
         Reservation reservation;
 
@@ -211,12 +234,14 @@ public class FacilityHandler {
 
     private void makeNewFacilityReservation(Facility facility) {
         output.println("** Redirecting to Client Mode **\n\n");
+
+        clientHandler = new ClientHandler(socket);
         clientHandler.startClientAccess();
     }
 
     private void manageInfo(Facility facility) {
 
-        try{
+        try {
 
             output.println("**** Facility Management Options: ****\n\n" +
                     "- Update (N)ame\n" +
@@ -228,7 +253,7 @@ public class FacilityHandler {
 
             String manageInfoChoice = input.readLine();
 
-            switch (manageInfoChoice){
+            switch (manageInfoChoice) {
 
                 case "N":
                     updateName(facility);
@@ -259,23 +284,34 @@ public class FacilityHandler {
 
     }
 
+    private volatile String phoneString;
     private void updatePhone(Facility facility) {
-        try{
-            output.println("** Update Facility Phone **\n" +
-                    "- Current Phone: " + facility.getAddress()+"\n" +
-                    "- New Address: ");
+        try {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                           "|                            Update Facility Phone                            |\n" +
+                           "+-----------------------------------------------------------------------------+\n"+
+                    "- Current Phone: " + facility.getPhone() + "\n" +
+                    "- New Phone: ");
 
-            facility.setAddress(input.readLine());
+            phoneString = input.readLine();
+            if (phoneString.matches("^[a-zA-Z]+$")) {
+
+                updatePhone(facility);
+            }
+            int phone = Integer.parseInt(phoneString);
+            facility.setPhone(phone);
+
             manageInfo(facility);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void updateAddress(Facility facility) {
-        try{
+        try {
             output.println("** Update Facility Address **\n" +
-                    "- Current Address: " + facility.getAddress()+"\n" +
+                    "- Current Address: " + facility.getAddress() + "\n" +
                     "- New Address: ");
 
             facility.setAddress(input.readLine());
@@ -286,9 +322,9 @@ public class FacilityHandler {
     }
 
     private void updateInfo(Facility facility) {
-        try{
+        try {
             output.println("** Update Facility Info **\n" +
-                    "- Current Info: " + facility.getAddress()+"\n" +
+                    "- Current Info: " + facility.getInfo() + "\n" +
                     "- New Info: ");
 
             facility.setInfo(input.readLine());
@@ -299,7 +335,7 @@ public class FacilityHandler {
     }
 
     private void updatePw(Facility facility) {
-        try{
+        try {
             output.println("** Update Login Password **\n" +
                     "- New Password: ");
 
@@ -311,9 +347,9 @@ public class FacilityHandler {
     }
 
     private void updateName(Facility facility) {
-        try{
+        try {
             output.println("** Update Facility Name **\n" +
-                    "- Current Name: " + facility.getAddress()+"\n" +
+                    "- Current Name: " + facility.getName() + "\n" +
                     "- New Name: ");
 
             facility.setName(input.readLine());

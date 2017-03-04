@@ -1,6 +1,7 @@
 package org.academiadecodigo.bytenavoid.facility;
 
 import org.academiadecodigo.bytenavoid.reservation.Reservation;
+import org.academiadecodigo.bytenavoid.util.Manager;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -60,21 +61,26 @@ public class Facility implements Serializable {
 
     public void setPw(String pw) {
         this.pw = pw;
+        Manager.saveFacilities();
     }
 
     public void setName(String name) {
         this.name = name;
+        Manager.saveFacilities();
     }
 
     public void setInfo(String info) {
         this.info = info;
+        Manager.saveFacilities();
     }
 
     public void setAddress(String address) {
         this.address = address;
+        Manager.saveFacilities();
     }
 
     public void setPhone(int phone) {
         this.phone = phone;
+        Manager.saveFacilities();
     }
 }

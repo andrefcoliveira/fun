@@ -1,8 +1,5 @@
 package org.academiadecodigo.bytenavoid.util;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -13,13 +10,18 @@ public abstract class FileManager {
 //getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
 
 
+    /**
+     * Recieves a CopyOnWriteArrayList of a file type and store every object in a .tmp
+     * file, in order to save the intel, but first, delete the previous existing file
+     * @param list
+     * @param type
+     */
     public synchronized static void saveFile(CopyOnWriteArrayList list, FileType type) {
 
         try {
 
             File file = new File(type.getFilename());
             file.delete();
-
 
             ObjectOutputStream oOS = new ObjectOutputStream(new FileOutputStream(type.getFilename()));
 
@@ -38,6 +40,12 @@ public abstract class FileManager {
 
     }
 
+    /**
+     * Given the FileType, access its specified directory and takes the present objects
+     * in the file to a CopyOnWriteArrayList
+     * @param type
+     * @return the CopyOnWriteArrayList of the specified type of object
+     */
     public synchronized static CopyOnWriteArrayList loadFile(FileType type) {
 
         CopyOnWriteArrayList<Object> list = null;
