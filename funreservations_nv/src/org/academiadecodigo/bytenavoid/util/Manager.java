@@ -45,10 +45,12 @@ public class Manager {
 
     public static void saveClients() {
         FileManager.saveFile(clientList, FileType.CLIENT);
+        saveReservations();
     }
 
     public static void saveFacilities() {
         FileManager.saveFile(facilities, FileType.FACILITY);
+        saveReservations();
     }
 
 

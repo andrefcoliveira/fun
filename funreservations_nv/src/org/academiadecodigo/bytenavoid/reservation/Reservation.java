@@ -11,8 +11,8 @@ import java.util.GregorianCalendar;
  */
 public class Reservation implements Serializable{
 
-    private Client client;
-    private Facility facility;
+    private volatile Client client;
+    private volatile Facility facility;
     private GregorianCalendar calendar;
 
 

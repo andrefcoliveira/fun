@@ -218,6 +218,7 @@ public class ClientHandler {
 
             output.println("Please, manage your reservation: \n ");
 
+
             output.println("Reservation on "
                     + facility.getName()
                     + " on " + Manager.getReservations().get(auxIndexList.get(numAnswer)).getCalendar().getTime()
