@@ -23,12 +23,12 @@ public class ClientHandler {
     private BufferedReader input = null;
     private Client client;
     private boolean isNewReservation = true;
+    int passAttempt = 0;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
 
         try {
-
             output = new PrintWriter(socket.getOutputStream(), true);
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -39,6 +39,7 @@ public class ClientHandler {
 
     public void startClientAccess() {
 
+        passAttempt = 0;
         String answer = "";
 
         output.println("(L)og In or (S)ign Up? ");
@@ -115,7 +116,8 @@ public class ClientHandler {
 
         if (clientExists(username)) {
             System.out.println("Client Exists");
-            chooseAction();
+            askPassword();
+            // chooseAction();
 
         } else {
 
@@ -135,21 +137,51 @@ public class ClientHandler {
                     break;
                 default:
                     logInClient(newUserName);
+            }
+        }
+    }
 
+    private void askPassword() {
+
+        try {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                            Enter your password:                             |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
+
+            String pass = input.readLine();
+
+            if (!client.getPassword().equals(pass)) {
+                passAttempt++;
+
+
+                if (passAttempt >= 3) {
+                    output.println("You've reached the limit attempts.");
+                    client = null;
+                    startClientAccess();
+                } else {
+                    output.println("Wrong password. Please try again.");
+                    askPassword();
+                }
+
+            } else {
+                chooseAction();
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void chooseAction() {
+
         String answer = "";
+
         try {
             output.println("What do you want to do? \n" +
                     "Make a (R)eservation \n" + "(M)anage a reservation \n"
                     + "(C)ancel a reservation \n" + "E(X)it");
 
             System.out.println("TESTING");
-
 
             answer = input.readLine();
             System.out.println("ANSWER " + answer);
@@ -178,6 +210,7 @@ public class ClientHandler {
     }
 
     private void manageReservation() {
+
         String answer = "";
         Reservation reservation;
         Facility facility;
@@ -226,11 +259,7 @@ public class ClientHandler {
             isNewReservation = false;
             Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
             chooseMonth(facility);
-
-
         }
-
-
     }
 
     private void cancelReservation() {
@@ -250,22 +279,27 @@ public class ClientHandler {
                 auxIndexList.add(i);
                 output.println("(" + counter++ + ") reservation to: " + reservation.getFacility().getName() + " on: " +
                         reservation.getCalendar().getTime());
-
             }
         }
+
         try {
             answer = input.readLine();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         if (answer.equals("M")) {
             chooseAction();
+
         } else if (!answer.matches("\\d+")) {
             output.println("Please write a valid answer (a number from the list): ");
             cancelReservation();
+
         } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
             output.println("Please write a valid answer (a number from the list): ");
             cancelReservation();
+
         } else {
             System.out.println(answer);
             int numAnswer = Integer.parseInt(answer) - 1;
@@ -276,7 +310,6 @@ public class ClientHandler {
                     + " was deleted.");
             Manager.removeReservation(Manager.getReservations().get(auxIndexList.get(numAnswer)));
         }
-
     }
 
     private void makeReservation() {
@@ -337,14 +370,17 @@ public class ClientHandler {
                 chosenFacilities.add(Manager.getFacilities().get(i));
             }
         }
+
         try {
             answer1 = input.readLine();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (answer1.equals("M")) {
             chooseAction();
+
         } else {
             for (int i = 0; i < chosenFacilities.size(); i++) {
                 if (Integer.parseInt(answer1) == (i + 1)) {
@@ -359,6 +395,7 @@ public class ClientHandler {
     private void chooseMonth(Facility facility) {
 
         // TODO: 04/03/17 os meses não estão a bater certo, a opção 3 está a escolher abril
+
         String month = "";
 
         output.println("Choose a month: \n" + "(1) January \n" + "(2) February \n" + "(3) March \n"
@@ -487,8 +524,10 @@ public class ClientHandler {
         if (!isNewReservation) {
             output.println("You have changed your reservation on " + facility.getName() + " to "
                     + reservation.getCalendar().getTime() + "\nPress any key to continue...");
+
             try {
                 input.readLine();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -496,8 +535,10 @@ public class ClientHandler {
         } else {
             output.println("You have made a new reservation to: " + facility.getName() + " on: " +
                     reservation.getCalendar().getTime() + "\nPress any key to continue...");
+
             try {
                 input.readLine();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -516,6 +557,3 @@ public class ClientHandler {
         return false;
     }
 }
-
-
-
