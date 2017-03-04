@@ -88,18 +88,15 @@ public class Server {
                     ClientHandler clientHandler = new ClientHandler(socket);
                     clientHandler.startClientAccess();
                     break;
-/*
 
                 case "E":
                     FacilityHandler facilityHandler = new FacilityHandler(socket);
                     facilityHandler.startFacilityAccess();
                     break;
 
-                default:
+                /*default:
                     errorMessage();
-
 */
-
             }
         }
     }

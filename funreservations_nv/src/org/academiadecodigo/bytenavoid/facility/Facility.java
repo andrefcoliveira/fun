@@ -12,16 +12,18 @@ public class Facility implements Serializable {
 
     private int ID;
     private String name;
-    private LinkedList<Reservation> reservationList;
     private FacilityType type;
     private String info;
     private String address;
     private int phone;
+    private String pw;
 
 
-    public Facility(int ID, FacilityType type, String name, String address, int phone, String info){
+
+    public Facility(int ID, String pw, FacilityType type, String name, String address, int phone, String info){
 
         this.ID = ID;
+        this.pw = pw;
         this.type = type;
         this.name = name;
         this.address = address;
@@ -54,10 +56,27 @@ public class Facility implements Serializable {
         return info;
     }
 
-    public void setReservationList(LinkedList<Reservation> reservationList) {
-        this.reservationList = reservationList;
+    public String getPw() {
+        return pw;
     }
-    public LinkedList<Reservation> getReservationList() {
-        return reservationList;
+
+    public void setPw(String pw) {
+        this.pw = pw;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
     }
 }
