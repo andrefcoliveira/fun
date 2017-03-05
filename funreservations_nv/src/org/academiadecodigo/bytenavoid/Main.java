@@ -2,8 +2,6 @@ package org.academiadecodigo.bytenavoid;
 
 import org.academiadecodigo.bytenavoid.server.Server;
 import org.academiadecodigo.bytenavoid.util.Manager;
-
-import java.net.URISyntaxException;
 import java.util.Scanner;
 
 /**
@@ -11,7 +9,7 @@ import java.util.Scanner;
  */
 public class Main {
 
-    public static void main(String[] args) throws URISyntaxException{
+    public static void main(String[] args) {
 
 
         Manager.init();

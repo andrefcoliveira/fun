@@ -36,8 +36,6 @@ public abstract class FileManager {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
 
 
@@ -70,8 +68,6 @@ public abstract class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 

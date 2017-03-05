@@ -28,7 +28,7 @@ public class Manager {
         return reservations;
     }
 
-    public static void init() throws URISyntaxException {
+    public static void init() {
 
         reservations = new CopyOnWriteArrayList<>();
         clientList = new CopyOnWriteArrayList<>();
