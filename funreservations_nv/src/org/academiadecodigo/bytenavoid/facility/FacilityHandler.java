@@ -139,7 +139,7 @@ public class FacilityHandler {
             output.println("- Manage (R)eservations \n" +
                     "- Manage (I)nfo\n" +
                     "- (L)ogOut");
-            String manageChoice = input.readLine();
+            String manageChoice = input.readLine().toUpperCase();
 
             switch (manageChoice) {
                 case "R":
@@ -180,7 +180,7 @@ public class FacilityHandler {
                     "- (D)elete Reservation\n" +
                     "- Go (B)ack");
 
-            String manageReservationChoice = input.readLine();
+            String manageReservationChoice = input.readLine().toUpperCase();
 
             switch (manageReservationChoice) {
 
@@ -307,7 +307,7 @@ public class FacilityHandler {
                     "- Update (P)hone\n" +
                     "- Go (B)ack");
 
-            String manageInfoChoice = input.readLine();
+            String manageInfoChoice = input.readLine().toUpperCase();
 
             switch (manageInfoChoice) {
 

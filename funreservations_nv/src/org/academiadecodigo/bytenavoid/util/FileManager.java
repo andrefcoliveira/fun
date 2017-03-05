@@ -1,5 +1,6 @@
 package org.academiadecodigo.bytenavoid.util;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

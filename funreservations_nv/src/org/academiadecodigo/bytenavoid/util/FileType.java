@@ -13,11 +13,16 @@ public enum FileType {
 
     String filename;
 
-    FileType(String filename) {
+    FileType(String filename){
         this.filename = filename;
     }
 
-    public String getFilename() {
+    public String getFilename(){
+
+        //TODO prepare path to deploy on jar Builder
+        //TODO handle exceptions on URI
+
+        //String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         return filename;
     }
 
