@@ -1,5 +1,6 @@
 package org.academiadecodigo.bytenavoid.client;
 
+import oracle.jvm.hotspot.jfr.StackTrace;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
 import org.academiadecodigo.bytenavoid.reservation.Reservation;
@@ -508,6 +509,7 @@ public class ClientHandler {
                 case "11":
                     if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 31) {
                         chooseHour(facility, month, day);
+                        chooseAction();//TESTING
                     } else {
                         chooseDay(facility, month);
                     }
@@ -516,6 +518,7 @@ public class ClientHandler {
                 case "1":
                     if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 28) {
                         chooseHour(facility, month, day);
+                        chooseAction();//TESTING
                     } else {
                         chooseDay(facility, month);
                     }
@@ -525,7 +528,13 @@ public class ClientHandler {
                 case "8":
                 case "10":
                     if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 30) {
+
                         chooseHour(facility, month, day);
+                        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+                        for (StackTraceElement element : stack) {
+                            System.out.println(element);
+                        }
+                        chooseAction();//TESTING
                     } else {
                         chooseDay(facility, month);
                     }
@@ -541,61 +550,68 @@ public class ClientHandler {
     private void chooseHour(Facility facility, String month, String day) {
 
         String hour = "";
-        boolean[] hours = new boolean[24];
+        boolean[] hours = new boolean[13];
         for (boolean b : hours) {
             b = false;
         }
 
-        output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|          These are the available hours for this day. Choose one:            |\n" +
-                "+-----------------------------------------------------------------------------+");
+        output.println("Processing...");
 
-        System.out.println(facility.getName());
-        for (int i = 0; i < Manager.getReservations().size(); i++) {
-            System.out.println(Manager.getReservations().get(i).getFacility().getName());
+        synchronized (Manager.getReservations()) {
 
-            if (Manager.getReservations().get(i).getFacility().getName().equals(facility.getName())) {
-                if (Manager.getReservations().get(i).getCalendar().get((Calendar.MONTH)) == Integer.parseInt(month)) {
-                    if (Manager.getReservations().get(i).getCalendar().get((Calendar.DAY_OF_MONTH)) == Integer.parseInt(day)) {
-                        hours[Manager.getReservations().get(i).getCalendar().get(Calendar.HOUR_OF_DAY)] = true;
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|          These are the available hours for this day. Choose one:            |\n" +
+                    "+-----------------------------------------------------------------------------+");
+
+            System.out.println(facility.getName());
+            for (int i = 0; i < Manager.getReservations().size(); i++) {
+                System.out.println(Manager.getReservations().get(i).getFacility().getName());
+
+                if (Manager.getReservations().get(i).getFacility().getName().equals(facility.getName())) {
+                    if (Manager.getReservations().get(i).getCalendar().get((Calendar.MONTH)) == Integer.parseInt(month)) {
+                        if (Manager.getReservations().get(i).getCalendar().get((Calendar.DAY_OF_MONTH)) == Integer.parseInt(day)) {
+                            hours[Manager.getReservations().get(i).getCalendar().get(Calendar.HOUR_OF_DAY) - 9] = true;
+                        }
                     }
                 }
             }
-        }
-        for (int i = 0; i < hours.length; i++) {
-            if (!hours[i]) {
-                output.print("(" + i + ")h00 | ");
+            for (int i = 0; i < hours.length; i++) {
+                if (!hours[i]) {
+                    output.print("(" + (i + 9) + ")h00 | ");
+                }
             }
-        }
-        output.println("- Back to (M)ain menu");
-        output.println("");
+            output.println("- Back to (M)ain menu");
+            output.println("");
 
-        try {
-            hour = input.readLine();
+            try {
+                hour = input.readLine();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        if (hour.equals("M") || hour.equals("m")) {
-            chooseAction();
+            if (hour.equals("M") || hour.equals("m")) {
+                //chooseAction();
 
-        } else if (!hour.matches("\\d+")) {
-            output.println("*** Please write a valid answer (a number from the list): ***");
-            chooseHour(facility, month, day);
-
-        } else if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
-            if (hours[Integer.parseInt(hour)]) {
-                output.println("*** That time slot is already taken. Please choose another one: ***");
+            } else if (!hour.matches("\\d+")) {
+                output.println("*** Please write a valid answer (a number from the list): ***");
                 chooseHour(facility, month, day);
+
+            } else if (Integer.parseInt(hour) >= 9 && Integer.parseInt(hour) <= 21) {
+                if (hours[Integer.parseInt(hour) - 9]) {
+                    output.println("*** That time slot is already taken. Please choose another one: ***");
+                    chooseHour(facility, month, day);
+                } else {
+                    createNewReservation(facility, month, day, hour);
+                }
             } else {
-                createNewReservation(facility, month, day, hour);
+                output.println("*** That's not a valid answer. ***");
+                chooseHour(facility, month, day);
             }
-        } else {
-            output.println("*** That's not a valid answer. ***");
-            chooseHour(facility, month, day);
         }
     }
+
+
 
     private void createNewReservation(Facility facility, String month, String day, String hour) {
 
@@ -614,7 +630,7 @@ public class ClientHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            chooseAction();
+            //chooseAction();
         } else {
             output.println("*** New reservation to: " + facility.getName() + " on: " +
                     reservation.getCalendar().getTime() + "\nPress any key to continue... ***");
@@ -625,7 +641,7 @@ public class ClientHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            chooseAction();
+            //chooseAction();
         }
     }
 
