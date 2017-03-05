@@ -20,11 +20,14 @@ public class Terminal {
     private static String line;
 
 
-    public static void main(String[] args) {
+    public void start() {
 
         try {
 
-            System.out.println("Welcome to FUNdão Reservations");
+
+            System.out.println("+-----------------------------------------------------------------------------+\n" +
+                               "|                      Welcome to FUNdão Reservations:                        |\n" +
+                    "+-----------------------------------------------------------------------------+\n");
 
             clientSocket = new Socket(host, port);
             out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -36,9 +39,6 @@ public class Terminal {
                 line = getMessage();
                 out.println(line);
                 out.flush();
-                if (line.equals("/quit")) {
-                    clientSocket.close();
-                }
             }
 
         } catch (IOException e) {

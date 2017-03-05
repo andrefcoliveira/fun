@@ -43,7 +43,7 @@ public class ClientHandler {
         String answer = "";
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                     Do you want to (L)ogin or (S)ignUp?                     |\n" +
+                       "|                            (L)og In | (S)ign Up                             |\n" +
                 "+-----------------------------------------------------------------------------+");
 
         try {
@@ -80,36 +80,38 @@ public class ClientHandler {
         try {
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                          Please, enter your name:                           |\n" +
+                    "|                              Enter your name:                               |\n" +
                     "+-----------------------------------------------------------------------------+");
             name = input.readLine();
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                        Please, choose an username:                          |\n" +
+                    "|                            Choose an Username:                              |\n" +
                     "+-----------------------------------------------------------------------------+");
             userName = input.readLine();
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                         Please, choose a password:                          |\n" +
+                    "|                             Choose a password:                              |\n" +
                     "+-----------------------------------------------------------------------------+");
             password = input.readLine();
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                         Please, enter your email:                           |\n" +
+                    "|                              Enter an email:                                |\n" +
                     "+-----------------------------------------------------------------------------+");
             email = input.readLine();
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                       Please, enter your phone number:                      |\n" +
-                    "+-----------------------------------------------------------------------------+");
+                    "|                             Enter a phone number:                          |\n" +
+                    "+----------------------------------------------------------------------------+");
             phoneNumber = Integer.parseInt(input.readLine());
 
             output.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n" +
-                    "+                      Welcome to the amazing Booking World                   +\n" +
+                    "+                          Welcome to FUNdão Reservations                     +\n" +
                     "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
             client = new Client(name, userName, password, email, phoneNumber);
             Manager.addClientToList(client);
+            this.client = client;
+            chooseAction();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -181,7 +183,7 @@ public class ClientHandler {
 
             } else {
                 output.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n" +
-                        "+                      Welcome to the amazing Booking World                   +\n" +
+                        "+                          Welcome to FUNdão Reservations                     +\n" +
                         "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
                 chooseAction();
@@ -246,7 +248,7 @@ public class ClientHandler {
                 reservation = Manager.getReservations().get(i);
 
                 auxIndexList.add(i);
-                output.println("(" + counter++ + ") reservation to: " + reservation.getFacility().getName() + " on: " +
+                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
                         reservation.getCalendar().getTime());
 
             }
@@ -296,7 +298,7 @@ public class ClientHandler {
         ArrayList<Integer> auxIndexList = new ArrayList<>();
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                "|                     Choose a reservation to cancell:                         |\n" +
+                       "|                     Choose a reservation to cancel:                         |\n" +
                 "+-----------------------------------------------------------------------------+");
 
         for (int i = 0; i < Manager.getReservations().size(); i++) {
@@ -305,7 +307,7 @@ public class ClientHandler {
                 reservation = Manager.getReservations().get(i);
 
                 auxIndexList.add(i);
-                output.println("(" + counter++ + ") reservation to: " + reservation.getFacility().getName() + " on: " +
+                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
                         reservation.getCalendar().getTime());
             }
         }
@@ -399,7 +401,7 @@ public class ClientHandler {
         ArrayList<Facility> chosenFacilities = new ArrayList<>();
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                "|                     Which facility you want to book:                        |\n" +
+                "|                          Choose facility to book:                           |\n" +
                 "+-----------------------------------------------------------------------------+\n");
 
         for (int i = 0; i < Manager.getFacilities().size(); i++) {
@@ -418,12 +420,11 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        if (!answer1.matches("\\d+")) {
+        if (answer1.equals("M")) {
+            chooseAction();
+        } else if (!answer1.matches("\\d+")) {
             output.println("*** Please write a valid answer (a number from the list): ***");
             choose(facilityType);
-        } else if (answer1.equals("M")) {
-            chooseAction();
-
         } else {
             for (int i = 0; i < chosenFacilities.size(); i++) {
                 if (Integer.parseInt(answer1) == (i + 1)) {
@@ -452,6 +453,7 @@ public class ClientHandler {
                 chooseAction();
 
             } else if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
+                month = Integer.toString(Integer.parseInt(month) - 1);
                 chooseDay(facility, month);
 
             } else {
@@ -469,7 +471,6 @@ public class ClientHandler {
         output.println("+-----------------------------------------------------------------------------+\n" +
                        "|                    Type the chosen day for your reservation                 |\n" +
                 "+-----------------------------------------------------------------------------+");
-
 
         try {
             day = input.readLine();
@@ -520,10 +521,16 @@ public class ClientHandler {
         for (boolean b : hours) {
             b = false;
         }
+
+        //TODO validate input on hours!
+
         output.println("+-----------------------------------------------------------------------------+\n" +
                        "|          These are the available hours for this day. Choose one:            |\n" +
                 "+-----------------------------------------------------------------------------+");
+
+        System.out.println(facility.getName());
         for (int i = 0; i < Manager.getReservations().size(); i++) {
+            System.out.println(Manager.getReservations().get(i).getFacility().getName());
 
             if (Manager.getReservations().get(i).getFacility().getName().equals(facility.getName())) {
                 if (Manager.getReservations().get(i).getCalendar().get((Calendar.MONTH)) == Integer.parseInt(month)) {
@@ -565,13 +572,13 @@ public class ClientHandler {
 
     private void createNewReservation(Facility facility, String month, String day, String hour) {
 
-        Reservation reservation = new Reservation(client, facility, Integer.parseInt(month) - 1, Integer.parseInt(day),
+        Reservation reservation = new Reservation(client, facility, Integer.parseInt(month), Integer.parseInt(day),
                 Integer.parseInt(hour));
 
         Manager.addReservationToList(reservation);
 
         if (!isNewReservation) {
-            output.println("*** You have changed your reservation on " + facility.getName() + " to "
+            output.println("*** Changed reservation on " + facility.getName() + " to "
                     + reservation.getCalendar().getTime() + "\nPress any key to continue... ***");
 
             try {
@@ -582,7 +589,7 @@ public class ClientHandler {
             }
             chooseAction();
         } else {
-            output.println("*** You have made a new reservation to: " + facility.getName() + " on: " +
+            output.println("*** New reservation to: " + facility.getName() + " on: " +
                     reservation.getCalendar().getTime() + "\nPress any key to continue... ***");
 
             try {

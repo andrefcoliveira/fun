@@ -75,7 +75,7 @@ public class Server {
 
             String answer = "";
 
-            output.println("(C)lient or (F)acility? or e(X)it");
+            output.println("(C)lient | (F)acility | e(X)it");
             try {
                 answer = input.readLine().toUpperCase();
 

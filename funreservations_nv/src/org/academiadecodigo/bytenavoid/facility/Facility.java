@@ -64,10 +64,6 @@ public class Facility implements Serializable {
         Manager.saveFacilities();
     }
 
-    public void setName(String name) {
-        this.name = name;
-        Manager.saveFacilities();
-    }
 
     public void setInfo(String info) {
         this.info = info;
@@ -83,5 +79,4 @@ public class Facility implements Serializable {
         this.phone = phone;
         Manager.saveFacilities();
     }
-    //lkzsgh
 }

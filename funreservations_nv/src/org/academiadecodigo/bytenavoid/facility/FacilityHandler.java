@@ -199,9 +199,9 @@ public class FacilityHandler {
 
             for (int i = 0; i < Manager.getReservations().size(); i++) {
 
-                if (Manager.getReservations().get(i).getFacility().getID() == Manager.getReservations().get(answer).getFacility().getID()) {
+                if (Manager.getReservations().get(i).getFacility().getID() == Manager.getReservations().get(answer-1).getFacility().getID()) {
                     Manager.removeReservation(Manager.getReservations().get(i));
-                    output.println("Reservation Deleted...");
+                    output.println("*** Reservation Deleted... ***");
                     manageReservations(facility);
                 }
             }
@@ -233,7 +233,7 @@ public class FacilityHandler {
     }
 
     private void makeNewFacilityReservation(Facility facility) {
-        output.println("** Redirecting to Client Mode **\n\n");
+        output.println("*** Redirecting to Client Mode ***\n\n");
 
         clientHandler = new ClientHandler(socket);
         clientHandler.startClientAccess();
@@ -248,7 +248,6 @@ public class FacilityHandler {
                     "+-----------------------------------------------------------------------------+\n");
 
             output.println("- (C)urrent Information\n" +
-                    "- Update (N)ame\n" +
                     "- Update Password(PW) \n" +
                     "- Update (I)nfo\n" +
                     "- Update (A)ddress\n" +
@@ -261,8 +260,6 @@ public class FacilityHandler {
 
                 case "C":
                     showInfo(facility);
-                case "N":
-                    updateName(facility);
                     break;
                 case "PW":
                     updatePw(facility);
@@ -371,22 +368,6 @@ public class FacilityHandler {
             output.println("- New Password: ");
 
             facility.setPw(input.readLine());
-            manageInfo(facility);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updateName(Facility facility) {
-        try {
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                           Update Facility Name                              |\n" +
-                    "+-----------------------------------------------------------------------------+\n");
-
-            output.println("- Current Name: " + facility.getName() + "\n" +
-                    "- New Name: ");
-
-            facility.setName(input.readLine());
             manageInfo(facility);
         } catch (IOException e) {
             e.printStackTrace();
