@@ -24,7 +24,7 @@ public class ClientHandler {
     private BufferedReader input = null;
     private Client client;
     private boolean isNewReservation = true;
-    int passAttempt = 0;
+    private int passAttempt = 0;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -38,13 +38,20 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * The client might choose (L)og in if he has already been registered, or (S)ign Up if he is a new
+     * client.
+     * Log In {@link #logInClient(String)}
+     * Sign Up {@link #signUpClient()}
+     */
+
     public void startClientAccess() {
 
         passAttempt = 0;
         String answer = "";
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                            (L)og In | (S)ign Up                             |\n" +
+                "|                            (L)og In | (S)ign Up                             |\n" +
                 "+-----------------------------------------------------------------------------+");
 
         try {
@@ -68,57 +75,15 @@ public class ClientHandler {
         }
     }
 
-    public void signUpClient() {
 
-        Client client = null;
-        String name = "";
-        String userName = "";
-        String password = "";
-        String email = "";
-
-        int phoneNumber;
-
-        try {
-
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                              Enter your name:                               |\n" +
-                    "+-----------------------------------------------------------------------------+");
-            name = input.readLine();
-
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                            Choose an Username:                              |\n" +
-                    "+-----------------------------------------------------------------------------+");
-            userName = input.readLine();
-
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                             Choose a password:                              |\n" +
-                    "+-----------------------------------------------------------------------------+");
-            password = input.readLine();
-
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                              Enter an email:                                |\n" +
-                    "+-----------------------------------------------------------------------------+");
-            email = input.readLine();
-
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                           "|                              Enter a phone number:                          |\n" +
-                           "+-----------------------------------------------------------------------------+");
-            phoneNumber = Integer.parseInt(input.readLine());
-
-            output.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n" +
-                    "+                          Welcome to FUNdão Reservations                     +\n" +
-                    "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-            client = new Client(name, userName, password, email, phoneNumber);
-            Manager.addClientToList(client);
-            this.client = client;
-            chooseAction();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Logs the Client onto the application.
+     *
+     * @param username is used to check if the username is valid and exists on our database.
+     * @see #clientExists(String).
+     * If the username exists, it asks for the password.
+     * @see #askPassword()
+     */
     private void logInClient(String username) {
 
         if (username.equals("")) {
@@ -160,6 +125,30 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * This methods iterated over the Client List and check if there's the
+     *
+     * @param username
+     * @returns true if there is this username and false if it's a new username.
+     */
+    private boolean clientExists(String username) {
+
+        for (Client c : Manager.getClientList()) {
+            if (c.getUserName().equals(username)) {
+                client = c;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the password input from the Client and compares it to the password that the client
+     * had set on its register.
+     * The client has the maximum password attempts of 3. If it fails the 3 times, he is redirected
+     * to the {@link #startClientAccess()}
+     * If the password is corrected he is redirected to the {@link #chooseAction()}
+     */
     private void askPassword() {
 
         try {
@@ -176,6 +165,7 @@ public class ClientHandler {
                 if (passAttempt >= 3) {
                     output.println("*** You've reached the attempts limit. ***");
                     client = null;
+                    passAttempt = 0;
                     startClientAccess();
                 } else {
                     output.println("\n! Wrong password. Please try again. !\n");
@@ -195,6 +185,74 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * Asks the client data, such as Name, Username - verifies if the username is unique -, Password, Email and Password.
+     * Instantiate a new Client and add then to the CopyOnWriteArrayList<Client> clientList.
+     * Then, he is redirected to the {@link #chooseAction()}
+     */
+    public void signUpClient() {
+
+        Client client = null;
+        String name = "";
+        String userName = "";
+        String password = "";
+        String email = "";
+
+        int phoneNumber;
+
+        try {
+
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                              Enter your name:                               |\n" +
+                    "+-----------------------------------------------------------------------------+");
+            name = input.readLine();
+
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                            Choose an Username:                              |\n" +
+                    "+-----------------------------------------------------------------------------+");
+            userName = input.readLine();
+
+            while (clientExists(userName)) {
+                output.println("*** This username has already been taken. Please choose another one: ***");
+                userName = input.readLine();
+            }
+
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                             Choose a password:                              |\n" +
+                    "+-----------------------------------------------------------------------------+");
+            password = input.readLine();
+
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                              Enter an email:                                |\n" +
+                    "+-----------------------------------------------------------------------------+");
+            email = input.readLine();
+
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                              Enter a phone number:                          |\n" +
+                    "+-----------------------------------------------------------------------------+");
+            phoneNumber = Integer.parseInt(input.readLine());
+
+            output.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n" +
+                    "+                          Welcome to FUNdão Reservations                     +\n" +
+                    "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+            client = new Client(name, userName, password, email, phoneNumber);
+            Manager.addClientToList(client);
+            this.client = client;
+            chooseAction();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This methods give some options to the client as
+     * {@link #makeReservation()}
+     * {@link #manageReservation(ArrayList)}
+     * {@link #cancelReservation(ArrayList)}
+     * or exiting the program, based on his inputs.
+     */
     private void chooseAction() {
 
         String answer = "";
@@ -232,42 +290,72 @@ public class ClientHandler {
         }
     }
 
-    private void printReservations(boolean isCancelReservation) {
-        Reservation reservation;
-        int counter = 1;
-        ArrayList<Integer> auxIndexList = new ArrayList<>();
+    /**
+     * This method gives the facility options so the client can choose his preferred facility
+     * {@link #choose(FacilityType)} or
+     * to return to the Main menu {@link #chooseAction()},
+     * based on his inputs.
+     */
+    private void makeReservation() {
 
-        if (isCancelReservation) {
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                     Choose a reservation to cancel:                         |\n" +
-                "+-----------------------------------------------------------------------------+");
-        } else {
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|               Choose the reservation you want to modify:                    |\n" +
-                    "+-----------------------------------------------------------------------------+");
+        String answer = "";
+        output.println("+-----------------------------------------------------------------------------+\n" +
+                "|               Choose the kind of facility you want to book:                 |\n" +
+                "+-----------------------------------------------------------------------------+\n" +
+                "- (1) Soccer \n" + "- (2) Tennis \n" + "- (3) Swimming pool \n" +
+                "- (4) Andebol \n" + "- (5) Basket \n" + "- (6) Squash \n" + "- (7) BTT \n" + "- (8) Escalada \n" + "- Back to (M)ain menu\n");
+
+        try {
+            answer = input.readLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        for (int i = 0; i < Manager.getReservations().size(); i++) {
-
-            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
-                reservation = Manager.getReservations().get(i);
-
-                auxIndexList.add(i);
-                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
-                        reservation.getCalendar().getTime());
-
-            }
+        switch (answer) {
+            case "M":
+            case "m":
+                chooseAction();
+                break;
+            case "1":
+                choose(FacilityType.SOCCER);
+                break;
+            case "2":
+                choose(FacilityType.TENNIS);
+                break;
+            case "3":
+                choose(FacilityType.SWIMMINGPOOL);
+                break;
+            case "4":
+                choose(FacilityType.ANDEBOL);
+                break;
+            case "5":
+                choose(FacilityType.BASKET);
+                break;
+            case "6":
+                choose(FacilityType.SQUASH);
+                break;
+            case "7":
+                choose(FacilityType.BTT);
+                break;
+            case "8":
+                choose(FacilityType.ESCALADA);
+                break;
+            default:
+                output.println("*** Please, enter a valid option. ***");
+                makeReservation();
         }
-        output.println(" - Back to (M)ain menu");
-
-        if (isCancelReservation) {
-            cancelReservation(auxIndexList);
-        } else {
-            manageReservation(auxIndexList);
-        }
-
-
     }
+
+    /**
+     * This method lets the client edit his reservations. It shows the reservations under
+     * this username and lets the client choose one to be managed. it was chosen
+     * to be managed and let the client choose a new month {@link #chooseMonth(Facility)},
+     * day {@link #chooseDay(Facility, String)} ,and hour {@link #chooseHour(Facility, String, String)}
+     * for his reservation.
+     *
+     * @param auxIndexList
+     */
 
     private void manageReservation(ArrayList<Integer> auxIndexList) {
 
@@ -282,7 +370,6 @@ public class ClientHandler {
         if (answer.equals("M")) {
             chooseAction();
 
-//        } else if (answer.matches("[0-9]+")) {
         } else if (answer.matches("[0-9]+")) {
             System.out.println(answer);
             int numAnswer = Integer.parseInt(answer);
@@ -352,56 +439,42 @@ public class ClientHandler {
         }
     }
 
-    private void makeReservation() {
+    private void printReservations(boolean isCancelReservation) {
+        Reservation reservation;
+        int counter = 1;
+        ArrayList<Integer> auxIndexList = new ArrayList<>();
 
-        String answer = "";
-        output.println("+-----------------------------------------------------------------------------+\n" +
-                "|               Choose the kind of facility you want to book:                 |\n" +
-                "+-----------------------------------------------------------------------------+\n" +
-                "- (1) Soccer \n" + "- (2) Tennis \n" + "- (3) Swimming pool \n" +
-                "- (4) Andebol \n" + "- (5) Basket \n" + "- (6) Squash \n" + "- (7) BTT \n" + "- (8) Escalada \n" + "- Back to (M)ain menu\n");
-
-        try {
-            answer = input.readLine();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (isCancelReservation) {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                     Choose a reservation to cancel:                         |\n" +
+                    "+-----------------------------------------------------------------------------+");
+        } else {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|               Choose the reservation you want to modify:                    |\n" +
+                    "+-----------------------------------------------------------------------------+");
         }
 
-        switch (answer) {
-            case "M":
-            case "m":
-                chooseAction();
-                break;
-            case "1":
-                choose(FacilityType.SOCCER);
-                break;
-            case "2":
-                choose(FacilityType.TENNIS);
-                break;
-            case "3":
-                choose(FacilityType.SWIMMINGPOOL);
-                break;
-            case "4":
-                choose(FacilityType.ANDEBOL);
-                break;
-            case "5":
-                choose(FacilityType.BASKET);
-                break;
-            case "6":
-                choose(FacilityType.SQUASH);
-                break;
-            case "7":
-                choose(FacilityType.BTT);
-                break;
-            case "8":
-                choose(FacilityType.ESCALADA);
-                break;
-            default:
-                output.println("*** Please, enter a valid option. ***");
-                makeReservation();
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
+                reservation = Manager.getReservations().get(i);
+
+                auxIndexList.add(i);
+                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+
             }
         }
+        output.println(" - Back to (M)ain menu");
+
+        if (isCancelReservation) {
+            cancelReservation(auxIndexList);
+        } else {
+            manageReservation(auxIndexList);
+        }
+
+
+    }
 
     private void choose(FacilityType facilityType) {
 
@@ -434,7 +507,7 @@ public class ClientHandler {
         } else if (!answer1.matches("\\d+")) {
             output.println("*** Please write a valid answer (a number from the list): ***");
             choose(facilityType);
-        } else if (Integer.parseInt(answer1) < 1 || Integer.parseInt(answer1) > chosenFacilities.size()){
+        } else if (Integer.parseInt(answer1) < 1 || Integer.parseInt(answer1) > chosenFacilities.size()) {
             output.println("*** Please write a valid answer (a number from the list): ***");
             choose(facilityType);
         } else {
@@ -487,7 +560,7 @@ public class ClientHandler {
         String day = "";
 
         output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                    Type the chosen day for your reservation                 |\n" +
+                "|                    Type the chosen day for your reservation                 |\n" +
                 "+-----------------------------------------------------------------------------+");
 
         try {
@@ -553,6 +626,7 @@ public class ClientHandler {
         }
     }
 
+
     private void chooseHour(Facility facility, String month, String day) {
 
         String hour = "";
@@ -617,8 +691,6 @@ public class ClientHandler {
         }
     }
 
-
-
     private void createNewReservation(Facility facility, String month, String day, String hour) {
 
         Reservation reservation = new Reservation(client, facility, Integer.parseInt(month), Integer.parseInt(day),
@@ -649,16 +721,5 @@ public class ClientHandler {
             }
             //chooseAction();
         }
-    }
-
-    private boolean clientExists(String username) {
-
-        for (Client c : Manager.getClientList()) {
-            if (c.getUserName().equals(username)) {
-                client = c;
-                return true;
-            }
-        }
-        return false;
     }
 }
