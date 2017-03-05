@@ -23,7 +23,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("(S)erver | (U)ser?");
-        String serverOrClient = scanner.nextLine();
+        String serverOrClient = scanner.nextLine().toUpperCase();
 
 
 

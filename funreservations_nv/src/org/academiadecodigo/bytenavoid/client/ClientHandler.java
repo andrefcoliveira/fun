@@ -100,8 +100,8 @@ public class ClientHandler {
             email = input.readLine();
 
             output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                             Enter a phone number:                          |\n" +
-                    "+----------------------------------------------------------------------------+");
+                           "|                              Enter a phone number:                          |\n" +
+                           "+-----------------------------------------------------------------------------+");
             phoneNumber = Integer.parseInt(input.readLine());
 
             output.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n" +
@@ -151,6 +151,7 @@ public class ClientHandler {
 
             switch (newUserName) {
                 case "S":
+                case "s":
                     signUpClient();
                     break;
                 default:
@@ -255,7 +256,7 @@ public class ClientHandler {
         }
         output.println(" - Back to (M)ain menu");
         try {
-            answer = input.readLine();
+            answer = input.readLine().toUpperCase();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -314,7 +315,7 @@ public class ClientHandler {
         output.println(" - Back to (M)ain menu");
 
         try {
-            answer = input.readLine();
+            answer = input.readLine().toUpperCase();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -368,6 +369,7 @@ public class ClientHandler {
 
         switch (answer) {
             case "M":
+            case "m":
                 chooseAction();
                 break;
             case "1":
@@ -420,7 +422,7 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        if (answer1.equals("M")) {
+        if (answer1.equals("M") || answer1.equals("m")) {
             chooseAction();
         } else if (!answer1.matches("\\d+")) {
             output.println("*** Please write a valid answer (a number from the list): ***");
@@ -449,7 +451,7 @@ public class ClientHandler {
         try {
             month = input.readLine();
 
-            if (month.equals("M")) {
+            if (month.equals("M") || month.equals("m")) {
                 chooseAction();
 
             } else if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
@@ -467,7 +469,9 @@ public class ClientHandler {
     }
 
     private void chooseDay(Facility facility, String month) {
+
         String day = "";
+
         output.println("+-----------------------------------------------------------------------------+\n" +
                        "|                    Type the chosen day for your reservation                 |\n" +
                 "+-----------------------------------------------------------------------------+");
@@ -480,6 +484,7 @@ public class ClientHandler {
 
         switch (month) {
             case "M":
+            case "m":
                 chooseAction();
                 break;
             case "1":
@@ -491,12 +496,16 @@ public class ClientHandler {
             case "12":
                 if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 31) {
                     chooseHour(facility, month, day);
+                } else {
+                    chooseDay(facility, month);
                 }
                 break;
 
             case "2":
                 if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 28) {
                     chooseHour(facility, month, day);
+                } else {
+                    chooseDay(facility, month);
                 }
                 break;
             case "4":
@@ -505,12 +514,14 @@ public class ClientHandler {
             case "11":
                 if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 30) {
                     chooseHour(facility, month, day);
+                } else {
+                    chooseDay(facility, month);
                 }
                 break;
 
             default:
                 output.println("*** Please, enter a valid option. ***");
-                chooseDay(facility, month);
+
         }
     }
 
@@ -521,8 +532,6 @@ public class ClientHandler {
         for (boolean b : hours) {
             b = false;
         }
-
-        //TODO validate input on hours!
 
         output.println("+-----------------------------------------------------------------------------+\n" +
                        "|          These are the available hours for this day. Choose one:            |\n" +
@@ -555,7 +564,7 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        if (hour.equals("M")) {
+        if (hour.equals("M") || hour.equals("m")) {
             chooseAction();
         } else if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
             if (hours[Integer.parseInt(hour)]) {
