@@ -1,6 +1,5 @@
 package org.academiadecodigo.bytenavoid.client;
 
-import oracle.jvm.hotspot.jfr.StackTrace;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.facility.FacilityType;
 import org.academiadecodigo.bytenavoid.reservation.Reservation;

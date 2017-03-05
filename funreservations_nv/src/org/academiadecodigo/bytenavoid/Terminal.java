@@ -23,7 +23,15 @@ public class Terminal {
     public void start() {
 
         try {
-
+            System.out.println(
+                    "   MMMMMMMMM   MMM    MMMM   MMMM    MMM         MMM     M ZMM+   \n" +
+                            "   MMM         MMM    MMMM   MMMMN   MMM         MMM               \n" +
+                            "   MMM         MMM    MMMM   MMMMM   MMM    MMMMMMMM    MMMMMMM     MMMMMMM\n" +
+                            "   MMMMMMMM    MMM    MMMM   MMM~MM  MMM   MMM   MMM         MMM   MMM   MMM,\n" +
+                            "   MMMMMMMM    MMM    MMMM   MMM MMM MMM  MMM?   MMM    NMMMMMMM  MMM?   ?MMM\n" +
+                            "   MMM         MMM    MMMI   MMM  MMMMMM  MMM+   MMM   MMM   MMM  MMM+   +MMM\n" +
+                            "   MMM         MMMM  MMMM    MMM   MMMMM   MMM   MMM   MMM   MMM   MMM   MMM\n" +
+                            "   MMM          MMMMMMMM     MMM    MMMM    MMMMMMMM   DMMMMMMMM    MMMMMMM");
 
             System.out.println("+-----------------------------------------------------------------------------+\n" +
                                "|                      Welcome to FUNdão Reservations:                        |\n" +
