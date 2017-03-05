@@ -8,7 +8,9 @@ public enum FacilityType {
     SOCCER,
     TENNIS,
     SWIMMINGPOOL,
-    VOLLEY,
-    RUNNING,
-    SPORTSSPACE
+    ANDEBOL,
+    BASKET,
+    SQUASH,
+    BTT,
+    ESCALADA
 }

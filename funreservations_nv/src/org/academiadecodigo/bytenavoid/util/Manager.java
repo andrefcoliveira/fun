@@ -4,6 +4,7 @@ import org.academiadecodigo.bytenavoid.client.Client;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.reservation.Reservation;
 
+import java.net.URISyntaxException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -27,7 +28,7 @@ public class Manager {
         return reservations;
     }
 
-    public static void init() {
+    public static void init() throws URISyntaxException {
 
         reservations = new CopyOnWriteArrayList<>();
         clientList = new CopyOnWriteArrayList<>();

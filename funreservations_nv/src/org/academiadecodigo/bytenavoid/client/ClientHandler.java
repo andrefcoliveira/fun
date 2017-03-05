@@ -359,7 +359,7 @@ public class ClientHandler {
                 "|               Choose the kind of facility you want to book:                 |\n" +
                 "+-----------------------------------------------------------------------------+\n" +
                 "- (1) Soccer \n" + "- (2) Tennis \n" + "- (3) Swimming pool \n" +
-                "- (4) Volley \n" + "- (5) Running \n" + "- (6) Sports Space \n" + "- Back to (M)ain menu\n");
+                "- (4) Andebol \n" + "- (5) Basket \n" + "- (6) Squash \n" + "- (7) BTT \n" + "- (8) Escalada \n" + "- Back to (M)ain menu\n");
 
         try {
             answer = input.readLine();
@@ -383,13 +383,19 @@ public class ClientHandler {
                 choose(FacilityType.SWIMMINGPOOL);
                 break;
             case "4":
-                choose(FacilityType.VOLLEY);
+                choose(FacilityType.ANDEBOL);
                 break;
             case "5":
-                choose(FacilityType.RUNNING);
+                choose(FacilityType.BASKET);
                 break;
             case "6":
-                choose(FacilityType.SPORTSSPACE);
+                choose(FacilityType.SQUASH);
+                break;
+            case "7":
+                choose(FacilityType.BTT);
+                break;
+            case "8":
+                choose(FacilityType.ESCALADA);
                 break;
             default:
                 output.println("*** Please, enter a valid option. ***");
