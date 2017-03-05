@@ -135,7 +135,6 @@ public class ClientHandler {
         if (clientExists(username)) {
             System.out.println("Client Exists");
             askPassword();
-            // chooseAction();
 
         } else {
 
@@ -221,10 +220,10 @@ public class ClientHandler {
                     makeReservation();
                     break;
                 case "M":
-                    manageReservation();
+                    printReservations(false);
                     break;
                 case "C":
-                    cancelReservation();
+                    printReservations(true);
                     break;
                 default:
                     chooseAction();
@@ -232,16 +231,20 @@ public class ClientHandler {
         }
     }
 
-    private void manageReservation() {
-
-        String answer = "";
+    private void printReservations(boolean isCancelReservation) {
         Reservation reservation;
-        Facility facility;
         int counter = 1;
         ArrayList<Integer> auxIndexList = new ArrayList<>();
-        output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|               Choose the reservation you want to modify:                    |\n" +
+
+        if (isCancelReservation) {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                       "|                     Choose a reservation to cancel:                         |\n" +
                 "+-----------------------------------------------------------------------------+");
+        } else {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|               Choose the reservation you want to modify:                    |\n" +
+                    "+-----------------------------------------------------------------------------+");
+        }
 
         for (int i = 0; i < Manager.getReservations().size(); i++) {
 
@@ -255,6 +258,21 @@ public class ClientHandler {
             }
         }
         output.println(" - Back to (M)ain menu");
+
+        if (isCancelReservation) {
+            cancelReservation(auxIndexList);
+        } else {
+            manageReservation(auxIndexList);
+        }
+
+
+    }
+
+    private void manageReservation(ArrayList<Integer> auxIndexList) {
+
+        String answer = "";
+        Facility facility;
+
         try {
             answer = input.readLine().toUpperCase();
         } catch (IOException e) {
@@ -263,12 +281,13 @@ public class ClientHandler {
         if (answer.equals("M")) {
             chooseAction();
 
+//        } else if (answer.matches("[0-9]+")) {
         } else if (answer.matches("[0-9]+")) {
             System.out.println(answer);
             int numAnswer = Integer.parseInt(answer);
             if (numAnswer < 1 || numAnswer > auxIndexList.size()) {
                 output.println("*** Please write a valid answer (a number from the list): ***");
-                manageReservation();
+                printReservations(false);
             } else {
                 numAnswer--;
                 facility = Manager.getReservations().get(auxIndexList.get(numAnswer)).getFacility();
@@ -286,33 +305,14 @@ public class ClientHandler {
 
         } else {
             output.println("*** Please write a valid answer (a number from the list): ***");
-            manageReservation();
+            printReservations(false);
         }
 
     }
 
-    private void cancelReservation() {
+    private void cancelReservation(ArrayList<Integer> auxIndexList) {
 
         String answer = "";
-        Reservation reservation;
-        int counter = 1;
-        ArrayList<Integer> auxIndexList = new ArrayList<>();
-
-        output.println("+-----------------------------------------------------------------------------+\n" +
-                       "|                     Choose a reservation to cancel:                         |\n" +
-                "+-----------------------------------------------------------------------------+");
-
-        for (int i = 0; i < Manager.getReservations().size(); i++) {
-
-            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
-                reservation = Manager.getReservations().get(i);
-
-                auxIndexList.add(i);
-                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
-                        reservation.getCalendar().getTime());
-            }
-        }
-        output.println(" - Back to (M)ain menu");
 
         try {
             answer = input.readLine().toUpperCase();
@@ -326,11 +326,11 @@ public class ClientHandler {
 
         } else if (!answer.matches("\\d+")) {
             output.println("*** Please write a valid answer (a number from the list): ***");
-            cancelReservation();
+            printReservations(true);
 
-        } else if (Integer.parseInt(answer) < 1 && Integer.parseInt(answer) > auxIndexList.size()) {
+        } else if (Integer.parseInt(answer) < 1 || Integer.parseInt(answer) > auxIndexList.size()) {
             output.println("*** Please write a valid answer (a number from the list): ***");
-            cancelReservation();
+            printReservations(true);
 
         } else {
             System.out.println(answer);
@@ -427,6 +427,9 @@ public class ClientHandler {
         } else if (!answer1.matches("\\d+")) {
             output.println("*** Please write a valid answer (a number from the list): ***");
             choose(facilityType);
+        } else if (Integer.parseInt(answer1) < 1 || Integer.parseInt(answer1) > chosenFacilities.size()){
+            output.println("*** Please write a valid answer (a number from the list): ***");
+            choose(facilityType);
         } else {
             for (int i = 0; i < chosenFacilities.size(); i++) {
                 if (Integer.parseInt(answer1) == (i + 1)) {
@@ -453,6 +456,10 @@ public class ClientHandler {
 
             if (month.equals("M") || month.equals("m")) {
                 chooseAction();
+
+            } else if (!month.matches("\\d+")) {
+                output.println("*** Please write a valid answer (a number from the list): ***");
+                chooseMonth(facility);
 
             } else if (Integer.parseInt(month) >= 1 && Integer.parseInt(month) <= 12) {
                 month = Integer.toString(Integer.parseInt(month) - 1);
@@ -482,45 +489,51 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-        switch (month) {
-            case "M":
-            case "m":
-                chooseAction();
-                break;
-            case "1":
-            case "3":
-            case "5":
-            case "7":
-            case "8":
-            case "10":
-            case "12":
-                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 31) {
-                    chooseHour(facility, month, day);
-                } else {
-                    chooseDay(facility, month);
-                }
-                break;
+        if (day.equals("M") || day.equals("m")) {
+            chooseAction();
 
-            case "2":
-                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 28) {
-                    chooseHour(facility, month, day);
-                } else {
-                    chooseDay(facility, month);
-                }
-                break;
-            case "4":
-            case "6":
-            case "9":
-            case "11":
-                if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 30) {
-                    chooseHour(facility, month, day);
-                } else {
-                    chooseDay(facility, month);
-                }
-                break;
+        } else if (!day.matches("\\d+")) {
+            output.println("*** Please write a valid answer (a day of the month): ***");
+            chooseDay(facility, month);
 
-            default:
-                output.println("*** Please, enter a valid option. ***");
+        } else {
+
+            switch (month) {
+                case "0":
+                case "2":
+                case "4":
+                case "6":
+                case "7":
+                case "9":
+                case "11":
+                    if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 31) {
+                        chooseHour(facility, month, day);
+                    } else {
+                        chooseDay(facility, month);
+                    }
+                    break;
+
+                case "1":
+                    if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 28) {
+                        chooseHour(facility, month, day);
+                    } else {
+                        chooseDay(facility, month);
+                    }
+                    break;
+                case "3":
+                case "5":
+                case "8":
+                case "10":
+                    if (Integer.parseInt(day) >= 1 && Integer.parseInt(day) <= 30) {
+                        chooseHour(facility, month, day);
+                    } else {
+                        chooseDay(facility, month);
+                    }
+                    break;
+
+                default:
+                    output.println("*** Please, enter a valid option. ***");
+            }
 
         }
     }
@@ -566,6 +579,11 @@ public class ClientHandler {
 
         if (hour.equals("M") || hour.equals("m")) {
             chooseAction();
+
+        } else if (!hour.matches("\\d+")) {
+            output.println("*** Please write a valid answer (a number from the list): ***");
+            chooseHour(facility, month, day);
+
         } else if (Integer.parseInt(hour) >= 0 && Integer.parseInt(hour) <= 23) {
             if (hours[Integer.parseInt(hour)]) {
                 output.println("*** That time slot is already taken. Please choose another one: ***");
