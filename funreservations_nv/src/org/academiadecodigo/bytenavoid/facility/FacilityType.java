@@ -6,9 +6,9 @@ package org.academiadecodigo.bytenavoid.facility;
 public enum FacilityType {
 
     SOCCER,
-    TENIS,
+    TENNIS,
     SWIMMINGPOOL,
-    VOLEY,
+    VOLLEY,
     RUNNING,
     SPORTSSPACE
 }

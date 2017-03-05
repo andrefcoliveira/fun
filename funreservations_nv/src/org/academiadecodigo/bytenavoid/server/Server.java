@@ -33,11 +33,11 @@ public class Server {
         while (true) {
 
             waitForClient(serverSocket, socket);
-
         }
     }
 
     private void waitForClient(ServerSocket serverSocket, Socket socket) {
+
         try {
             System.out.println("Server ready...");
             socket = serverSocket.accept();
@@ -107,7 +107,7 @@ public class Server {
 
             //closes socket after all methods are out of the stack
             try {
-                output.println("** Exiting... **");
+                output.println("*** Exiting... ***");
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();

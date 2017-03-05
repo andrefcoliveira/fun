@@ -374,13 +374,13 @@ public class ClientHandler {
                 choose(FacilityType.SOCCER);
                 break;
             case "2":
-                choose(FacilityType.TENIS);
+                choose(FacilityType.TENNIS);
                 break;
             case "3":
                 choose(FacilityType.SWIMMINGPOOL);
                 break;
             case "4":
-                choose(FacilityType.VOLEY);
+                choose(FacilityType.VOLLEY);
                 break;
             case "5":
                 choose(FacilityType.RUNNING);
