@@ -29,6 +29,11 @@ public class FacilityHandler {
     }
 
 
+    /**
+     * starts by calling the askID to the user in order to make the login and to know what facility is browsing,
+     * when done, calls the askPw for that facility to complete the login. When login is completed, calls the method
+     * manageOptions for that facility.
+     */
     public void startFacilityAccess() {
 
         Facility facility = askID();
@@ -42,8 +47,14 @@ public class FacilityHandler {
     }
 
 
+
     private volatile String idString;
 
+    /**
+     * Ask the user for input in order to start the login, if it doesn't receive an integer or an unvalid, calls
+     * the method again until a valid one is provided. When the valid ID is given,
+     * @return the facility that wants to login
+     */
     private Facility askID() {
 
         try {
@@ -80,6 +91,13 @@ public class FacilityHandler {
 
     private int passAttempt;
 
+    /**
+     * receives the facility that want's to login and asks for a password, for every time the password is wrong,
+     * increments the integer passAttempt, and when it reaches 3 sends the user back to the startFacilityAccess.
+     * @param facility
+     * @return true when the password for the given facility is correct
+     */
+
     private boolean askPw(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
@@ -89,6 +107,7 @@ public class FacilityHandler {
 
             if (passAttempt == 3) {
                 startFacilityAccess();
+                passAttempt = 0;
             }
 
             if (!facility.getPw().equals(pass)) {
@@ -102,6 +121,13 @@ public class FacilityHandler {
         return true;
     }
 
+    /**
+     * Shows the user the options that he have and receives the user input of his choice.
+     * If the user choose an invalid option, calls back the same method. When the input is a valid option,
+     * calls the method relative to the option choosen.
+     *
+     * @param facility
+     */
 
     private void manageOptions(Facility facility) {
 
@@ -135,6 +161,13 @@ public class FacilityHandler {
         }
     }
 
+    /**
+     * Shows the user the options that he have and receives the user input of his choice.
+     * If the user choose an invalid option, calls back the same method. When the input is a valid option,
+     * calls the method relative to the option choosen.
+     *
+     * @param facility
+     */
     private void manageReservations(Facility facility) {
 
         try {
@@ -172,8 +205,14 @@ public class FacilityHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    /**
+     * Given the facility, iterates for the reservations stored an display to the user his own reservations,
+     * associated with a number. Receives the input of the user whith the number of the reservation and calls
+     * the Manager method to remove that reservation.
+     * @param facility
+     */
 
     private void deleteReservation(Facility facility) {
 
@@ -212,6 +251,10 @@ public class FacilityHandler {
 
     }
 
+    /**
+     * Displays the reservations for the given facility
+     * @param facility
+     */
     private void checkCurrentReservations(Facility facility) {
 
         output.println("+-----------------------------------------------------------------------------+\n" +
@@ -232,6 +275,10 @@ public class FacilityHandler {
         manageReservations(facility);
     }
 
+    /**
+     * Re-directs the user to the client area
+     * @param facility
+     */
     private void makeNewFacilityReservation(Facility facility) {
         output.println("*** Redirecting to Client Mode ***\n\n");
 
@@ -239,6 +286,12 @@ public class FacilityHandler {
         clientHandler.startClientAccess();
     }
 
+
+    /**
+     * Shows the user his managing option relative to his info and recives input relative to that options. If
+     * the input is invalid, calls the same method, otherwise, calls the method relative to the input
+     * @param facility
+     */
     private void manageInfo(Facility facility) {
 
         try {
@@ -287,6 +340,10 @@ public class FacilityHandler {
 
     }
 
+    /**
+     * Displays the info relative to this user and calls the previous method
+     * @param facility
+     */
     private void showInfo(Facility facility) {
 
         output.println("+-----------------------------------------------------------------------------+\n" +
@@ -304,6 +361,11 @@ public class FacilityHandler {
 
     private volatile String phoneString;
 
+    /**
+     * Displays the current phone number of this user and recives the input of the new info, calling the setPhone method
+     * if the input is valid
+     * @param facility
+     */
     private void updatePhone(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
@@ -327,6 +389,11 @@ public class FacilityHandler {
         }
     }
 
+    /**
+     * Displays the current adress of this user and recives the input of the new info, calling the setAdress method
+     * @param facility
+     */
+
     private void updateAddress(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
@@ -343,6 +410,11 @@ public class FacilityHandler {
         }
     }
 
+    /**
+     * Displays the current info of this user and recives the input of the new info, calling the setInfo method
+     * @param facility
+     */
+
     private void updateInfo(Facility facility) {
         try {
             output.println("+-----------------------------------------------------------------------------+\n" +
@@ -358,6 +430,11 @@ public class FacilityHandler {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Recives the input of the new password, calling the setPw method
+     * @param facility
+     */
 
     private void updatePw(Facility facility) {
         try {
