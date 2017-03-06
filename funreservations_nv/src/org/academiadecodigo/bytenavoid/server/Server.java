@@ -17,7 +17,7 @@ public class Server {
     private static final int PORT_NUM = 9090;
 
     public void init() {
-
+        System.out.println(fundao());
         ServerSocket serverSocket = null;
         Socket socket = null;
 
@@ -39,7 +39,6 @@ public class Server {
     private void waitForClient(ServerSocket serverSocket, Socket socket) {
 
         try {
-            System.out.println(fundao());
             System.out.println("\nServer ready...");
             socket = serverSocket.accept();
 
