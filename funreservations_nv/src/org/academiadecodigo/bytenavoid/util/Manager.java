@@ -4,7 +4,6 @@ import org.academiadecodigo.bytenavoid.client.Client;
 import org.academiadecodigo.bytenavoid.facility.Facility;
 import org.academiadecodigo.bytenavoid.reservation.Reservation;
 
-import java.net.URISyntaxException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -84,4 +83,8 @@ public class Manager {
         reservations.remove(reservation);
         saveReservations();
     }
+
+     String box = "+-----------------------------------------------------------------------------+\n" +
+             "|       |\n" +
+             "+-----------------------------------------------------------------------------+\n";
 }
