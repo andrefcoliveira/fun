@@ -1,10 +1,7 @@
 package org.academiadecodigo.bytenavoid.facility;
 
-import org.academiadecodigo.bytenavoid.reservation.Reservation;
 import org.academiadecodigo.bytenavoid.util.Manager;
-
 import java.io.Serializable;
-import java.util.LinkedList;
 
 /**
  * Created by codecadet on 01/03/17.

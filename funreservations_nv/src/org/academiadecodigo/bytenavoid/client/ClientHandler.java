@@ -16,6 +16,10 @@ import java.util.Calendar;
 /**
  * Created by codecadet on 01/03/17.
  */
+
+/**
+ * Class responsible for performing actions concerning the client.
+ */
 public class ClientHandler {
 
     private Socket socket;
@@ -38,12 +42,11 @@ public class ClientHandler {
     }
 
     /**
-     * The client might choose (L)og in if he has already been registered, or (S)ign Up if he is a new
-     * client.
+     * This method asks the client to choose between (L)og in, if it has already been registered, or (S)ign Up, if
+     * it is a new client.
      * Log In {@link #logInClient(String)}
      * Sign Up {@link #signUpClient()}
      */
-
     public void startClientAccess() {
 
         passAttempt = 0;
@@ -74,11 +77,10 @@ public class ClientHandler {
         }
     }
 
-
     /**
-     * Logs the Client onto the application.
+     * This method logs the Client onto the application.
      *
-     * @param username is used to check if the username is valid and exists on our database.
+     * @param username is used to check if the username is valid and exists on the database.
      * @see #clientExists(String).
      * If the username exists, it asks for the password.
      * @see #askPassword()
@@ -125,10 +127,10 @@ public class ClientHandler {
     }
 
     /**
-     * This methods iterated over the Client List and check if there's the
+     * This method iterates over the Client List and checks if there's a client with that username.
      *
      * @param username
-     * @returns true if there is this username and false if it's a new username.
+     * @returns true if there is that username and false if it doesn't exist.
      */
     private boolean clientExists(String username) {
 
@@ -142,11 +144,11 @@ public class ClientHandler {
     }
 
     /**
-     * Gets the password input from the Client and compares it to the password that the client
+     * This method gets the password input from the Client and compares it to the password that the client
      * had set on its register.
-     * The client has the maximum password attempts of 3. If it fails the 3 times, he is redirected
-     * to the {@link #startClientAccess()}
-     * If the password is corrected he is redirected to the {@link #chooseAction()}
+     * The client has the maximum password attempts of 3. If it fails the 3 times, it is redirected
+     * to the {@link #startClientAccess()} method.
+     * If the password is correct it is redirected to the {@link #chooseAction()} method.
      */
     private void askPassword() {
 
@@ -185,9 +187,10 @@ public class ClientHandler {
     }
 
     /**
-     * Asks the client data, such as Name, Username - verifies if the username is unique -, Password, Email and Password.
-     * Instantiate a new Client and add then to the CopyOnWriteArrayList<Client> clientList.
-     * Then, he is redirected to the {@link #chooseAction()}
+     * Asks the client data, such as Name, Username - verifies if the username is unique -, Password, Email and
+     * Phone number.
+     * Instantiates a new Client and add it to the CopyOnWriteArrayList<Client> clientList.
+     * Then, it is redirected to the {@link #chooseAction()} method.
      */
     public void signUpClient() {
 
@@ -246,11 +249,11 @@ public class ClientHandler {
     }
 
     /**
-     * This methods give some options to the client as
+     * This methods gives some options to the client as:
      * {@link #makeReservation()}
      * {@link #manageReservation(ArrayList)}
      * {@link #cancelReservation(ArrayList)}
-     * or exiting the program, based on his inputs.
+     * or exiting the program, based on its inputs.
      */
     private void chooseAction() {
 
@@ -290,10 +293,10 @@ public class ClientHandler {
     }
 
     /**
-     * This method gives the facility options so the client can choose his preferred facility
+     * This method gives the facility options so the client can choose its preferred facility to book
      * {@link #choose(FacilityType)} or
      * to return to the Main menu {@link #chooseAction()},
-     * based on his inputs.
+     * based on its inputs.
      */
     private void makeReservation() {
 
@@ -347,15 +350,14 @@ public class ClientHandler {
     }
 
     /**
-     * This method lets the client edit his reservations. It shows the reservations under
-     * this username and lets the client choose one to be managed. it was chosen
-     * to be managed and let the client choose a new month {@link #chooseMonth(Facility)},
-     * day {@link #chooseDay(Facility, String)} ,and hour {@link #chooseHour(Facility, String, String)}
-     * for his reservation.
+     * This method lets the client edit its reservations. It shows the reservations under
+     * the client username and lets it choose one to be managed.
+     * The client must choose a new month {@link #chooseMonth(Facility)},
+     * day {@link #chooseDay(Facility, String)}, and hour {@link #chooseHour(Facility, String, String)}
+     * for its reservation.
      *
-     * @param auxIndexList
+     * @param auxIndexList is the list of the reservations that the client has.
      */
-
     private void manageReservation(ArrayList<Integer> auxIndexList) {
 
         String answer = "";
@@ -397,6 +399,56 @@ public class ClientHandler {
 
     }
 
+    /**
+     * This is an auxiliary method to show the right message weather the client is managing a
+     * reservation {@link #makeReservation()}
+     * or cancelling it {@link #cancelReservation(ArrayList)}
+     *
+     * @param isCancelReservation is to check if it is to cancel or to manage the reservation.
+     */
+    private void printReservations(boolean isCancelReservation) {
+        Reservation reservation;
+        int counter = 1;
+        ArrayList<Integer> auxIndexList = new ArrayList<>();
+
+        if (isCancelReservation) {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|                     Choose a reservation to cancel:                         |\n" +
+                    "+-----------------------------------------------------------------------------+");
+        } else {
+            output.println("+-----------------------------------------------------------------------------+\n" +
+                    "|               Choose the reservation you want to modify:                    |\n" +
+                    "+-----------------------------------------------------------------------------+");
+        }
+
+        for (int i = 0; i < Manager.getReservations().size(); i++) {
+
+            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
+                reservation = Manager.getReservations().get(i);
+
+                auxIndexList.add(i);
+                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
+                        reservation.getCalendar().getTime());
+
+            }
+        }
+        output.println(" - Back to (M)ain menu");
+
+        if (isCancelReservation) {
+            cancelReservation(auxIndexList);
+        } else {
+            manageReservation(auxIndexList);
+        }
+
+
+    }
+
+
+    /**
+     * This method is used to cancel the reservation that is under the client.
+     *
+     * @param auxIndexList is the list of the reservations that the client has.
+     */
     private void cancelReservation(ArrayList<Integer> auxIndexList) {
 
         String answer = "";
@@ -438,43 +490,12 @@ public class ClientHandler {
         }
     }
 
-    private void printReservations(boolean isCancelReservation) {
-        Reservation reservation;
-        int counter = 1;
-        ArrayList<Integer> auxIndexList = new ArrayList<>();
 
-        if (isCancelReservation) {
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|                     Choose a reservation to cancel:                         |\n" +
-                    "+-----------------------------------------------------------------------------+");
-        } else {
-            output.println("+-----------------------------------------------------------------------------+\n" +
-                    "|               Choose the reservation you want to modify:                    |\n" +
-                    "+-----------------------------------------------------------------------------+");
-        }
-
-        for (int i = 0; i < Manager.getReservations().size(); i++) {
-
-            if (Manager.getReservations().get(i).getClient().getName().equals(client.getName())) {
-                reservation = Manager.getReservations().get(i);
-
-                auxIndexList.add(i);
-                output.println("(" + counter++ + ") Reservation to: " + reservation.getFacility().getName() + " on: " +
-                        reservation.getCalendar().getTime());
-
-            }
-        }
-        output.println(" - Back to (M)ain menu");
-
-        if (isCancelReservation) {
-            cancelReservation(auxIndexList);
-        } else {
-            manageReservation(auxIndexList);
-        }
-
-
-    }
-
+    /**
+     * This method allows the choosing of a facility type.
+     *
+     * @param facilityType is the type of existing facilities to be booked.
+     */
     private void choose(FacilityType facilityType) {
 
         String answer1 = "";
@@ -520,6 +541,11 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * This method allows the client to choose a month for its reservation.
+     *
+     * @param facility is the facility chosen by the client.
+     */
     private void chooseMonth(Facility facility) {
 
         String month = "";
@@ -554,6 +580,12 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * This method allows the client to choose a day for its reservation.
+     *
+     * @param facility is the facility chosen by the client.
+     * @param month    is the month chosen by the client.
+     */
     private void chooseDay(Facility facility, String month) {
 
         String day = "";
@@ -625,7 +657,16 @@ public class ClientHandler {
         }
     }
 
-
+    /**
+     * This method allows the client to choose an hour for its reservation.
+     *
+     * @param facility is the facility chosen by the client.
+     * @param month    is the month chosen by the client.
+     * @param day      is the day chosen by the client.
+     *                 <p>
+     *                 Then, a new reservation is made.
+     * @see #createNewReservation(Facility, String, String, String).
+     */
     private void chooseHour(Facility facility, String month, String day) {
 
         String hour = "";
@@ -690,6 +731,16 @@ public class ClientHandler {
         }
     }
 
+    /**
+     * This method creates a new reservation based on the client choices for:
+     *
+     * @param facility is the facility chosen by the client.
+     * @param month    is the month chosen by the client.
+     * @param day      is the day chosen by the client.
+     * @param hour     is the hour chosen by the client.
+     *                 <p>
+     *                 Then add the reservation for the Reservation List on the Manager Class.
+     */
     private void createNewReservation(Facility facility, String month, String day, String hour) {
 
         Reservation reservation = new Reservation(client, facility, Integer.parseInt(month), Integer.parseInt(day),
