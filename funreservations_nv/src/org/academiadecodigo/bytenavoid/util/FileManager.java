@@ -8,7 +8,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class FileManager {
 
-//getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()
+
+/*    public static void createFile(FileType type) throws URISyntaxException {
+        String path = FileManager.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        File file = new File(path + type.getFilename().split("/")[1]);
+
+        String[] array = path.split("/");
+        path = "";
+        for (int i = 0; i < array.length - 1; i++) {
+            path += array[i] + "/";
+        }
+        System.out.println(path);
+
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
+
 
 
     /**

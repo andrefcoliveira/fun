@@ -1,7 +1,11 @@
 package org.academiadecodigo.bytenavoid;
 
 import org.academiadecodigo.bytenavoid.server.Server;
+import org.academiadecodigo.bytenavoid.util.FileManager;
+import org.academiadecodigo.bytenavoid.util.FileType;
 import org.academiadecodigo.bytenavoid.util.Manager;
+
+import java.net.URISyntaxException;
 import java.util.Scanner;
 
 /**
@@ -9,7 +13,13 @@ import java.util.Scanner;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws URISyntaxException {
+/*
+
+        FileManager.createFile(FileType.CLIENT);
+        FileManager.createFile(FileType.RESERVATION);
+        FileManager.createFile(FileType.FACILITY);
+*/
 
 
         Manager.init();

@@ -6,9 +6,9 @@ package org.academiadecodigo.bytenavoid.util;
  */
 public enum FileType {
 
-    CLIENT("clients.tmp"),
-    FACILITY("facilities.tmp"),
-    RESERVATION("reservations.tmp");
+    CLIENT("resources/clients.tmp"),
+    FACILITY("resources/facilities.tmp"),
+    RESERVATION("resources/reservations.tmp");
 
 
     String filename;
