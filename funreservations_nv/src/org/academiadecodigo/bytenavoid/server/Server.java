@@ -39,7 +39,7 @@ public class Server {
     private void waitForClient(ServerSocket serverSocket, Socket socket) {
 
         try {
-            fundao();
+            System.out.println(fundao());
             System.out.println("\nServer ready...");
             socket = serverSocket.accept();
 
@@ -54,16 +54,16 @@ public class Server {
 
     }
 
-    private void fundao() {
-        System.out.println(
-                        " MMMMMMMMM   MMM    MMMM   MMMM    MMM         MMM     M ZMM+   \n" +
-                        " MMM         MMM    MMMM   MMMMN   MMM         MMM               \n" +
-                        " MMM         MMM    MMMM   MMMMM   MMM    MMMMMMMM    MMMMMMM     MMMMMMM\n" +
-                        " MMMMMMMM    MMM    MMMM   MMM~MM  MMM   MMM   MMM         MMM   MMM   MMM,\n" +
-                        " MMMMMMMM    MMM    MMMM   MMM MMM MMM  MMM?   MMM    NMMMMMMM  MMM?   ?MMM\n" +
-                        " MMM         MMM    MMMI   MMM  MMMMMM  MMM+   MMM   MMM   MMM  MMM+   +MMM\n" +
-                        " MMM         MMMM  MMMM    MMM   MMMMM   MMM   MMM   MMM   MMM   MMM   MMM\n" +
-                        " MMM          MMMMMMMM     MMM    MMMM    MMMMMMMM   DMMMMMMMM    MMMMMMM");
+    public String fundao() {
+         return
+                 "   MMMMMMMMM   MMM    MMMM   MMMM    MMM         MMM     M ZMM+   \n" +
+                         "   MMM         MMM    MMMM   MMMMN   MMM         MMM               \n" +
+                         "   MMM         MMM    MMMM   MMMMM   MMM    MMMMMMMM    MMMMMMM     MMMMMMM\n" +
+                         "   MMMMMMMM    MMM    MMMM   MMM~MM  MMM   MMM   MMM         MMM   MMM   MMM,\n" +
+                         "   MMMMMMMM    MMM    MMMM   MMM MMM MMM  MMM?   MMM    NMMMMMMM  MMM?   ?MMM\n" +
+                         "   MMM         MMM    MMMI   MMM  MMMMMM  MMM+   MMM   MMM   MMM  MMM+   +MMM\n" +
+                         "   MMM         MMMM  MMMM    MMM   MMMMM   MMM   MMM   MMM   MMM   MMM   MMM\n" +
+                         "   MMM          MMMMMMMM     MMM    MMMM    MMMMMMMM   DMMMMMMMM    MMMMMMM\n";
 
     }
 
@@ -88,6 +88,8 @@ public class Server {
             }
 
             String answer = "";
+
+            output.println(fundao());
 
             output.println("(C)lient | (F)acility | e(X)it");
             try {
