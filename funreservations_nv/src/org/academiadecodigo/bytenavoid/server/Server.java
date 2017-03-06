@@ -17,7 +17,7 @@ public class Server {
     private static final int PORT_NUM = 9090;
 
     public void init() {
-
+        System.out.println(fundao());
         ServerSocket serverSocket = null;
         Socket socket = null;
 
@@ -39,7 +39,7 @@ public class Server {
     private void waitForClient(ServerSocket serverSocket, Socket socket) {
 
         try {
-            System.out.println("Server ready...");
+            System.out.println("\nServer ready...");
             socket = serverSocket.accept();
 
         } catch (IOException e) {
@@ -50,6 +50,19 @@ public class Server {
         InitHandler initHandler = new InitHandler(socket);
         Thread thread = new Thread(initHandler);
         thread.start();
+
+    }
+
+    public String fundao() {
+         return
+                 "   MMMMMMMMM   MMM    MMMM   MMMM    MMM         MMM     M ZMM+   \n" +
+                         "   MMM         MMM    MMMM   MMMMN   MMM         MMM               \n" +
+                         "   MMM         MMM    MMMM   MMMMM   MMM    MMMMMMMM    MMMMMMM     MMMMMMM\n" +
+                         "   MMMMMMMM    MMM    MMMM   MMM~MM  MMM   MMM   MMM         MMM   MMM   MMM,\n" +
+                         "   MMMMMMMM    MMM    MMMM   MMM MMM MMM  MMM?   MMM    NMMMMMMM  MMM?   ?MMM\n" +
+                         "   MMM         MMM    MMMI   MMM  MMMMMM  MMM+   MMM   MMM   MMM  MMM+   +MMM\n" +
+                         "   MMM         MMMM  MMMM    MMM   MMMMM   MMM   MMM   MMM   MMM   MMM   MMM\n" +
+                         "   MMM          MMMMMMMM     MMM    MMMM    MMMMMMMM   DMMMMMMMM    MMMMMMM\n";
 
     }
 
@@ -74,6 +87,8 @@ public class Server {
             }
 
             String answer = "";
+
+            output.println(fundao());
 
             output.println("(C)lient | (F)acility | e(X)it");
             try {
